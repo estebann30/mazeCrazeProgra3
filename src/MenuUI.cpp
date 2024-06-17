@@ -1,5 +1,6 @@
 // menu.cpp
 #include "MenuUI.hpp"
+#include "CellUI.hpp"
 
 Menu::Menu(sf::RenderWindow &window) : window(window) {
     if (!loadTextures()) {
@@ -51,11 +52,16 @@ void Menu::handleEvents() {
             if (event.mouseButton.button == sf::Mouse::Left) {
                 if (isSpriteClicked(startButtonSprite)) {
                     std::cout << "Sprite 1 clickeado!" << std::endl;
-                    window.clear();
-                    window.draw(openedSprite);
-                    window.display();
+
+                     window.clear();
+                     Cell cell(window);
+                     // Ejemplo: configurar las paredes
+                     cell.configureWalls(false, true, false, true);
+                     cell.run();
+                   
                 }
                 if (isSpriteClicked(exitButtonSprite)) {
+                    window.close();
                     std::cout << "Sprite 2 clickeado!" << std::endl;
                 }
             }
