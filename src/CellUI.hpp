@@ -6,17 +6,16 @@
 
 class Cell {
 public:
-    Cell(sf::RenderWindow &window);
-    void run();
+    Cell(sf::RenderWindow& window, bool upper, bool right, bool left, bool below);
+    void draw(sf::RenderWindow& window);
+
     void configureWalls(bool upper, bool right, bool left, bool below);
 
 private:
     void handleWalls();
-    void render();
-    void adjustWallSprites(const sf::Vector2u &windowSize); //adjust Walls to tey respective position
+    void adjustWallSprites(const sf::Vector2u &textureSize); // const sf::Vector2u &textureSize
     bool loadTextures();
 
-    sf::RenderWindow &window;
 
     sf::Sprite cellSprite; //background
     sf::Sprite upperWallSprite;

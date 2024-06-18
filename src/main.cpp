@@ -7,6 +7,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Menu de Inicio", sf::Style::Titlebar | sf::Style::Close);
     //for static window
 
+    Menu menu(window);
     try {
         Menu menu(window);
         menu.run();

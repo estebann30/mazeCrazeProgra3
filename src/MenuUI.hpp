@@ -15,11 +15,10 @@ private:
     sf::Sprite backgroundSprite;
     sf::Sprite startButtonSprite;
     sf::Sprite exitButtonSprite;
-    sf::Sprite openedSprite;
     sf::Texture backgroundTexture;
     sf::Texture startButtonTexture;
     sf::Texture exitButtonTexture;
-    sf::Texture openedTexture;
+    
 
     bool loadTextures();
     void handleEvents();

@@ -20,15 +20,12 @@ Menu::Menu(sf::RenderWindow &window) : window(window) {
     startButtonSprite.setPosition(100, 500);
     exitButtonSprite.setPosition(400, 505);
 
-    openedSprite.setTexture(openedTexture);
-    openedSprite.setPosition(500, 100);
 }
 
 bool Menu::loadTextures() {
     if (!backgroundTexture.loadFromFile("../assets/menu1.jpeg") ||
         !startButtonTexture.loadFromFile("../assets/startButt.png") ||
-        !exitButtonTexture.loadFromFile("../assets/exitButt.png") ||
-        !openedTexture.loadFromFile("../assets/todoAbierto.jpeg")) {
+        !exitButtonTexture.loadFromFile("../assets/exitButt.png")) {
         return false; //exception
     }
     return true;
@@ -51,18 +48,18 @@ void Menu::handleEvents() {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
                 if (isSpriteClicked(startButtonSprite)) {
-                    std::cout << "Sprite 1 clickeado!" << std::endl;
+                    std::cout << "Play Button clicked!" << std::endl;
 
                      window.clear();
-                     Cell cell(window);
+                     //Cell cell(window);
                      // Ejemplo: configurar las paredes
-                     cell.configureWalls(false, true, false, true);
-                     cell.run();
+                     //cell.configureWalls(false, true, false, true);
+                     //cell.run();
                    
                 }
                 if (isSpriteClicked(exitButtonSprite)) {
                     window.close();
-                    std::cout << "Sprite 2 clickeado!" << std::endl;
+                    std::cout << "Exit Button clicked!" << std::endl;
                 }
             }
         }
