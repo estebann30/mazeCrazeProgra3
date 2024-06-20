@@ -1,6 +1,6 @@
 #include "CellUI.hpp"
 
-Cell::Cell(sf::RenderWindow& window, bool upper, bool right, bool left, bool below) {
+Cell::Cell(sf::RenderWindow& window) {
 
     if (!loadTextures()) {
         throw std::runtime_error("Failed to load textures"); //exception
@@ -37,12 +37,12 @@ bool Cell::loadTextures() {
 }
 
 
-void Cell::configureWalls(bool upper, bool right, bool left, bool below) {
-    upperWall = upper;
-    rightWall = right;
-    leftWall = left;
-    belowWall = below;
-}
+//void Cell::configureWalls(bool upper, bool right, bool left, bool below) {
+  //  upperWall = upper;
+ //   rightWall = right;
+  //  leftWall = left;
+  //  belowWall = below;
+//}
 
 void Cell::handleWalls() {
 
@@ -87,20 +87,20 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
     belowWallSprite.setPosition(cellBounds.left, cellBounds.top + cellBounds.height - belowWallSprite.getGlobalBounds().height);
 }
 
-void Cell::draw(sf::RenderWindow& window) {
+void Cell::draw(sf::RenderWindow& window, bool upper, bool right, bool left, bool below) { 
 
     window.draw(cellSprite);
 
-    if (upperWall) {
+    if (upper) {
         window.draw(upperWallSprite);
     }
-    if (rightWall) {
+    if (right) {
         window.draw(rightWallSprite);
     }
-    if (leftWall) {
+    if (left) {
         window.draw(leftWallSprite);
     }
-    if (belowWall) {
+    if (below) {
         window.draw(belowWallSprite);
     }
 

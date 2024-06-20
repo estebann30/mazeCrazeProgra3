@@ -6,7 +6,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Cell UI Test");
 
     // Create a Cell object
-    Cell cell(window, true, false, true, false);
+    Cell cell(window);
 
     // Main loop
     while (window.isOpen()) {
@@ -22,7 +22,7 @@ int main() {
         window.clear();
 
         // Draw the cell
-        cell.draw(window);
+        cell.draw(window, true, true, true, true);
 
         // Update the window
         window.display();

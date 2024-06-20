@@ -6,8 +6,8 @@
 
 class Cell {
 public:
-    Cell(sf::RenderWindow& window, bool upper, bool right, bool left, bool below);
-    void draw(sf::RenderWindow& window);
+    Cell(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window, bool upper, bool right, bool left, bool below);
 
     void configureWalls(bool upper, bool right, bool left, bool below);
 
