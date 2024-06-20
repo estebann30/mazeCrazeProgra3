@@ -1,8 +1,6 @@
 #include "Explorer.h"
 
-using namespace std;
-
-Explorer::Explorer() : players(2, vector<int>(4, 0)) {}
+Explorer::Explorer() : players(2, vector<int>(4, 0)), player(1) {}
 
         //[1][0] = JUGADOR 1 POSICION EN X
         //[2][1] = JUGADOR 2 POSICION EN Y
@@ -15,39 +13,39 @@ void Explorer:: setExplorer(int p, int x, int y){
 }
 
 void Explorer:: moveN(int p){
-    players[p - 1][1]++;
+    players[p - 1][1]--; //norte
 }
 
 void Explorer:: moveS(int p){
-    players[p - 1][1]--;
+    players[p - 1][1]++; //sur
 }
 
 void Explorer:: moveE(int p){
-    players[p - 1][0]++;
+    players[p - 1][0]++; //este
 }
 
 void Explorer:: moveW(int p){
-    players[p - 1][0]--;
+    players[p - 1][0]--; //oeste
 }
 
 void Explorer:: moveNE(int p){
     players[p - 1][0]++;
-    players[p - 1][1]++;
+    players[p - 1][1]--;
 }
 
 void Explorer:: moveNW(int p){
     players[p - 1][0]--;
-    players[p - 1][1]++;
+    players[p - 1][1]--;
 }
 
 void Explorer:: moveSE(int p){
     players[p - 1][0]++;
-    players[p - 1][1]--;
+    players[p - 1][1]++;
 }
 
 void Explorer:: moveSW(int p){
     players[p - 1][0]--;
-    players[p - 1][1]--;
+    players[p - 1][1]++;
 }
 
 void Explorer:: changePlayer(int p){

@@ -60,7 +60,6 @@ class Explorer {
         int getMindFlay(int p) const;
 
         int getJumps(int p) const;
-
 };
 
 #endif

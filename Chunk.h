@@ -1,8 +1,6 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
-#include <iostream>
-
 using namespace std;
 
 class Chunk {
