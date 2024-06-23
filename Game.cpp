@@ -142,12 +142,15 @@ void Game::render() {
 
     for (int x = 0; x < totalSpritesX; x++) {
         for (int y = 0; y < totalSpritesY; y++) {
-            sprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
+            //sprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
             //window.draw(sprite);
 
             //colocar la casila
-            //cell.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
-            cell.draw(window,true,true,true,true);
+            if(startedOnce == false){
+                cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
+            }
+            //cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
+            cell[x][y].draw(window,true,true,true,true);
 
             Node& node = grid.getNode(x, y);
             if (node.hasPower1) {
@@ -180,6 +183,8 @@ void Game::render() {
             }
         }
     }
+
+    startedOnce = true;
 
     // Renderizar jugadores
     for (int x = 0; x < totalSpritesX; ++x) {

@@ -16,34 +16,23 @@ Cell::Cell() {
     belowWallSprite.setTexture(belowWallTexture);
 
     // Adjust wall sprites
-    sf::Vector2u textureSize = cellTexture.getSize();
-    adjustWallSprites(textureSize);
+    //sf::Vector2u textureSize = cellTexture.getSize();
+    //adjustWallSprites(textureSize);
   
 }
 
 bool Cell::loadTextures() {
 
-    //estoy usando la misma imagen de muro para todos los lados porque poniendo el personalizado se ve medio chafa
-    // la imagen tapadoAA es la misma que la de la derecha e izquierda solo que invertida para que quede horizontal
-    
-    //revisar esto
-    if (!cellTexture.loadFromFile("../assets/todoAbierto.jpeg") || //background
-        !upperWallTexture.loadFromFile("../assets/cinta.jpg") ||  // ../assets/tapadoArribaa.jpeg
-        !leftWallTexture.loadFromFile("../assets/tapadoCostadoo.jpeg") ||        
-        !rightWallTexture.loadFromFile("../assets/tapadoCostadoo.jpeg") ||
-        !belowWallTexture.loadFromFile("../assets/cinta.jpg")) {    // ../assets/tapadoAbajoo.jpeg
+    if (!cellTexture.loadFromFile("./assets/todoAbierto.jpeg") || //background
+        !upperWallTexture.loadFromFile("./assets/cinta.jpg") ||  // ../assets/tapadoArribaa.jpeg
+        !leftWallTexture.loadFromFile("./assets/tapadoCostadoo.jpeg") ||        
+        !rightWallTexture.loadFromFile("./assets/tapadoCostadoo.jpeg") ||
+        !belowWallTexture.loadFromFile("./assets/cinta.jpg")) {    // ../assets/tapadoAbajoo.jpeg
         return false; //exception
     }
     return true;
 }
 
-
-//void Cell::configureWalls(bool upper, bool right, bool left, bool below) {
-  //  upperWall = upper;
- //   rightWall = right;
-  //  leftWall = left;
-  //  belowWall = below;
-//}
 
 void Cell::handleWalls() {
 
@@ -60,19 +49,13 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
 
     //for top and below
     float up_and_below_scaleX = static_cast<float>(textureSize.x) / up_and_below_wallTextureSize.x;
-    //float up_and_below_scaleY = static_cast<float>(textureSize.y) / up_and_below_wallTextureSize.y;
 
     //for right and left
-    //float right_and_left_scaleX = static_cast<float>(textureSize.x) / right_and_left_wallTextureSize.x;
     float right_and_left_scaleY = static_cast<float>(textureSize.y) / right_and_left_wallTextureSize.y;
 
     // Adjust the scales to fit within the scaled cell sprite
     up_and_below_scaleX *= 0.1f;
-    //up_and_below_scaleY *= 0.1f;  //no se usa
-
-    //right_and_left_scaleX *= 0.1f;  //no se usa
     right_and_left_scaleY *= 0.1f;
-
 
 
     upperWallSprite.setScale(up_and_below_scaleX, 0.1f);
@@ -88,9 +71,15 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
     belowWallSprite.setPosition(cellBounds.left, cellBounds.top + cellBounds.height - belowWallSprite.getGlobalBounds().height);
 }
 
+
 void Cell::draw(sf::RenderWindow& window, bool upper, bool right, bool left, bool below) { 
 
+    sf::Vector2u textureSize = cellTexture.getSize();
+    adjustWallSprites(textureSize);
+    
     window.draw(cellSprite);
+
+    adjustWallSprites(textureSize);
 
     if (upper) {
         window.draw(upperWallSprite);
@@ -105,5 +94,5 @@ void Cell::draw(sf::RenderWindow& window, bool upper, bool right, bool left, boo
         window.draw(belowWallSprite);
     }
 
-    window.display();
+    //window.display();
 }

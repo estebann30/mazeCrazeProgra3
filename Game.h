@@ -17,6 +17,7 @@ public:
     void receiveGrid(const std::vector<std::vector<Node>>& newGrid);
     void sendEventToBackend(const std::string& event, const std::string& player, const std::string& direction);
 
+    bool startedOnce = false;
 private:
     void processEvents();
     void update();
@@ -29,7 +30,7 @@ private:
     sf::Texture texture;
     sf::Sprite sprite;
 
-   Cell cell;
+    Cell cell[MAZE_WIDTH][MAZE_HEIGHT]; //create all cell objects
 
     sf::Texture playerTexture;
     sf::Sprite player1;

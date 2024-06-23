@@ -8,8 +8,7 @@ class Cell {
 public:
     Cell();
     void draw(sf::RenderWindow& window, bool upper, bool right, bool left, bool below);
-
-    void configureWalls(bool upper, bool right, bool left, bool below);
+    sf::Sprite cellSprite; //background
 
 private:
     void handleWalls();
@@ -17,7 +16,7 @@ private:
     bool loadTextures();
 
 
-    sf::Sprite cellSprite; //background
+    //sf::Sprite cellSprite; //background
     sf::Sprite upperWallSprite;
     sf::Sprite leftWallSprite;
     sf::Sprite rightWallSprite;
