@@ -7,6 +7,7 @@
 #include "Node.h"
 #include "Grid.h"
 #include "Config.h"
+#include "CellUI.hpp"
 
 class Game {
 public:
@@ -27,6 +28,9 @@ private:
     sf::RenderWindow window;
     sf::Texture texture;
     sf::Sprite sprite;
+
+   Cell cell;
+
     sf::Texture playerTexture;
     sf::Sprite player1;
     sf::Sprite player2;

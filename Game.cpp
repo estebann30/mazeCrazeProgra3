@@ -1,9 +1,10 @@
 #include "Game.h"
+#include "CellUI.hpp"
 
 // Constructor que inicializa el juego
 Game::Game()
     : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MazeCraze"),
-      grid(MAZE_WIDTH, MAZE_HEIGHT) {
+      grid(MAZE_WIDTH, MAZE_HEIGHT){
 
     // Cargar la textura del fondo
     if (!texture.loadFromFile("assets/todoAbierto.jpeg")) {
@@ -142,7 +143,11 @@ void Game::render() {
     for (int x = 0; x < totalSpritesX; x++) {
         for (int y = 0; y < totalSpritesY; y++) {
             sprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
-            window.draw(sprite);
+            //window.draw(sprite);
+
+            //colocar la casila
+            //cell.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
+            cell.draw(window,true,true,true,true);
 
             Node& node = grid.getNode(x, y);
             if (node.hasPower1) {
