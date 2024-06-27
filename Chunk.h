@@ -14,16 +14,16 @@ class Chunk {
         int floor;
 
         //hay un jugador dentro?
-        bool occupied = false;
+        bool occupied;
 
         //fue visitado?
-        bool visited = false;
+        bool visited;
 
         //está inexplorado? Es baldosa o pared?
-        char terrain = 'u';
+        char terrain;
 
         //que contiene? Ej: vacío, tesoro, portal, poder, etc...
-        char contain = 'v';
+        char contain;
 
         //Conecciones entre chunks MODULARES?
         Chunk* N;
@@ -39,7 +39,7 @@ class Chunk {
 
     public:
 
-        Chunk(int room = 0, int floor = 0, bool occupied = false, bool visited = false, char terrain = 'u', char contain = 'v');
+        Chunk(int room = 0, int floor = 0, bool occupied = false, bool visited = false, char terrain = 'u', char contain = '#');
 
         //devuelven la informacion que se les pide
         int getRoom() const;

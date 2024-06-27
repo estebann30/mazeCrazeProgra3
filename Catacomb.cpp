@@ -7,37 +7,43 @@
 
 using namespace std;
 
-Catacomb:: Catacomb() : explorer() {}
+Catacomb:: Catacomb() {}
 
-Explorer& Catacomb:: explorers() {
-    return explorer;
-}
-
-void Catacomb:: mazeMapping(int rows, int cols) {
-    layout = vector<vector<Chunk*>>(rows, vector<Chunk*>(cols, nullptr));
+void Catacomb:: mazeMapping() {
+    int rooms = 5;
+    int floors = 5;
+    
+    layout = vector<vector<Chunk*>>(rooms, vector<Chunk*>(floors, nullptr));
     //cout << endl << "Im working" << endl;
 
     try {
-        DFS(0, 0, rows -1, cols -1, rows, cols);
+        DFS(0, 0, rooms -1, floors -1, rooms, floors);
     } catch(const exception& e) {
         cerr << "Exception caught in mazeMapping: " << e.what() << ". Retrying DFS..." << endl;
         //mi respaldo
-        layout = vector<vector<Chunk*>>(rows, vector<Chunk*>(cols, nullptr));
-        DFS(0, 0, rows -1, cols -1, rows, cols);
+        layout = vector<vector<Chunk*>>(rooms, vector<Chunk*>(floors, nullptr));
+        DFS(0, 0, rooms -1, floors -1, rooms, floors);
     }
 }
 
+vector<vector<Chunk*>>& Catacomb:: mapped() {
+    return layout;
+}
 
+
+//METER TESORO!!!!!!!!!
 
 void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
     stack<pair<int, int>> layer;
     layer.push({p1x, p1y});
 
+    //dejo mis huellas almacenadas para poner el tesoro a la mitad
+    vector<pair<int, int>> path;
+
     // Aplicar un numero random
     random_device dice;
     mt19937 gen(dice());
-    uniform_int_distribution<> faces(1, 4);
-
+    
     while(!layer.empty()) {
         auto [r, c] = layer.top();
         layer.pop();
@@ -51,10 +57,20 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
         }
 
         layout[r][c]->setVisited(true);
+        path.push_back({r, c});
 
         if(r == p2x && c == p2y) {
-            cout << "destino r = " << r << endl;
-            cout << "destino c = " << c << endl;
+            //cout << "destino r = " << r << endl;
+            //cout << "destino c = " << c << endl;
+
+            //ubica el tesoro
+            int step = path.size() % 2;
+            int treasureChamber = path.size() / 2;
+            if(step != 0) {
+                treasureChamber -= step;
+            }
+            auto[tileX, tileY] = path[treasureChamber];
+            layout[tileX][tileY]->setContain('$');
             return;
         }
 
@@ -152,74 +168,101 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
     throw runtime_error("Condición de error encontrada en DFS");
 }
 
+// hacer un void que agregue nodos restantes y conecte random con poderes
+void Catacomb:: tunneler(){
 
-void Catacomb:: thombRaider() {
+    int x = layout.size() - 1;
+    int y = layout[0].size() - 1;
 
+    // Aplicar un numero random
+    random_device dice;
+    mt19937 gen(dice());
+    uniform_int_distribution<> d2 (1, 2);
+    uniform_int_distribution<> d8(1, 8);
+    uniform_int_distribution<> coordenatesX(0, x);
+    uniform_int_distribution<> coordenatesY(0, y);
+    
+    //crea nodos donde no hay aun
     for(int room = 0; room < layout.size(); ++room){
         for(int floor = 0; floor < layout[room].size(); ++floor){
+            if(layout[room][floor] == nullptr) {
+               layout[room][floor] = new Chunk();
+            }
             if(layout[room][floor] != nullptr) {
                 layout[room][floor]->setRoom(room);
                 layout[room][floor]->setFloor(floor);
             } 
-        }
-    }
-
-    // //metodo para visualizar los indicadores numericos de los nodos
-    // for(int room = 0; room < layout.size(); ++room){
-    //     for(int floor = 0; floor < layout[room].size(); ++floor){
-    //         if(layout[room][floor] != nullptr) {
-    //             cout << "[" << layout[room][floor]->getRoom() << ", " << layout[room][floor]->getFloor() << "]";
-    //         } else {
-    //             cout << "      ";
-    //         }
-    //         cout << " ";
-    //     }
-    //     cout << endl;
-    // }
-
-    int row = layout.size() * 2 + 1;
-    int col = layout[0].size() * 2 + 1;
-    vector<vector<char>> thomb(row, vector<char>(col, ' '));
-
-    for(int r = 0; r < layout.size(); ++r){
-        for(int c = 0; c < layout[0].size(); ++c){
             
-            int rr = r * 2 + 1;
-            int cc = c * 2 + 1;
+            int link = d2(gen);
 
-            if(layout[r][c] == nullptr){
-                thomb[rr][cc] = ' ';
-            } else {
-                thomb[rr][cc] = ' ';
+            //conecta al menos 1 vez chunk aislados
+            if(layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getWest() == nullptr) {
 
-                if(layout[r][c]->getFloor() == explorer.getX(1) && layout[r][c]->getRoom() == explorer.getY(1)) {
-                    thomb[rr][cc] = '1';
-                } else if(layout[r][c]->getFloor() == explorer.getX(2) && layout[r][c]->getRoom() == explorer.getY(2)) {
-                    thomb[rr][cc] = '2';
+                bool deadEnd = true;
+                while(deadEnd) {
+                    if(link == 1 && room > 0 && layout[room - 1][floor] != nullptr && layout[room - 1][floor]->getSouth() == nullptr) {
+                        layout[room][floor]->setNorth(layout[room - 1][floor]);
+                        layout[room - 1][floor]->setSouth(layout[room][floor]);
+                        deadEnd = false;
+                    }
+                    //link = d2(gen);
+                    if(link == 2 && room < layout.size() - 1 && layout[room + 1][floor] != nullptr && layout[room + 1][floor]->getNorth() == nullptr) {
+                        layout[room][floor]->setSouth(layout[room + 1][floor]);
+                        layout[room + 1][floor]->setNorth(layout[room][floor]);
+                        deadEnd = false;
+                    } 
+                    link = d2(gen);
+                    if (link == 2 && floor < layout[0].size() - 1 && layout[room][floor + 1] != nullptr && layout[room][floor + 1]->getWest() == nullptr) {
+                        layout[room][floor]->setEast(layout[room][floor + 1]);
+                        layout[room][floor + 1]->setWest(layout[room][floor]);
+                        deadEnd = false;
+                    }
+                    //link = d2(gen);
+                    if (link == 1 && floor > 0 && layout[room][floor - 1] != nullptr && layout[room][floor - 1]->getEast() == nullptr) {
+                        layout[room][floor]->setWest(layout[room][floor - 1]);
+                        layout[room][floor - 1]->setEast(layout[room][floor]);
+                        deadEnd = false;
+                    }
+                    link = d2(gen);
                 }
+            }
 
-                if(layout[r][c] != nullptr) {
-                    if(layout[r][c]->getEast() != nullptr) {
-                        thomb[rr][cc + 1] = '-';
-                    }
-                    if(layout[r][c]->getSouth() != nullptr) {
-                        thomb[rr + 1][cc] = '|';
-                    }
-                    if(layout[r][c]->getWest() != nullptr) {
-                        thomb[rr][cc - 1] = '-';
-                    }
-                    if(layout[r][c]->getNorth() != nullptr) {
-                        thomb[rr - 1][cc] = '|';
-                    }
+            int warp = d8(gen);
+            int axisX = coordenatesX(gen);
+            int axisY = coordenatesY(gen);
+
+            //portales random
+            if((warp == 1 || warp == 2) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setNorth(layout[axisX][axisY]);
+                layout[room][floor]->setContain('w');
+            } else if((warp == 1 || warp == 2) && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setSouth(layout[axisX][axisY]);
+                layout[room][floor]->setContain('w');
+            } else if((warp == 1 || warp == 2) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setEast(layout[axisX][axisY]);
+                layout[room][floor]->setContain('w');
+            } else if((warp == 1 || warp == 2) && layout[room][floor]->getWest() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setWest(layout[axisX][axisY]);
+                layout[room][floor]->setContain('w');
+            }
+
+            int power = d8(gen);
+            //asignacion de poderes
+            if(layout[room][floor]->getContain() == '#'){
+                if(power == 1) {
+                    //mindFlay
+                    layout[room][floor]->setContain('@');
+                } else if(power == 2){
+                    //double jump
+                    layout[room][floor]->setContain('&');
                 }
             }
         }
     }
-
-    for (int r = 0; r < row; ++r) {
-        for (int c = 0; c < col; ++c) {
-            cout << thomb[r][c] << " ";
-        }
-        cout << endl;
-    }
 }
+
+//faltan
+//saltos sobre paredes
+//verificar mindflay
+//desaparecer poder al usarlo
+//verificar que se añaden poderes

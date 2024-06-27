@@ -9,34 +9,34 @@ Controller:: Controller() {}
 
 
 //leer la entrada
-void Controller:: pad(Catacomb& maze) {
+void Controller:: pad(Explorer& explorer) {
     char keybind;
 
     cin >> keybind;
     //keybind = 'w';
 
-    if(maze.explorers().getPlayer() == 1){
+    if(explorer.getPlayer() == 1){
         switch (keybind){
             case 'w':
             case 'W':
-                maze.explorers().moveN(1);
+                explorer.moveN(1);
                 break;
             case 'a':
             case 'A':
-                maze.explorers().moveW(1);
+                explorer.moveW(1);
                 break;
             case 's':
             case 'S':
-                maze.explorers().moveS(1);
+                explorer.moveS(1);
                 break;
             case 'd':
             case 'D':
-                maze.explorers().moveE(1);
+                explorer.moveE(1);
                 break;
             default:
                 break;
         }
-    } else if(maze.explorers().getPlayer() == 2) {
+    } else if(explorer.getPlayer() == 2) {
         
         //flechas del teclado aqui
         char arrowBind;
@@ -46,16 +46,16 @@ void Controller:: pad(Catacomb& maze) {
             cin >> arrowBind;
             switch (arrowBind){
                 case 'A':
-                    maze.explorers().moveN(maze.explorers().getPlayer());
+                    explorer.moveN(2);
                     break;
                 case 'B':
-                    maze.explorers().moveS(maze.explorers().getPlayer());
+                    explorer.moveS(2);
                     break;
                 case 'C':
-                    maze.explorers().moveE(maze.explorers().getPlayer());
+                    explorer.moveE(2);
                     break;
                 case 'D':
-                    maze.explorers().moveW(maze.explorers().getPlayer());
+                    explorer.moveW(2);
                     break;
                 default:
                     break;
@@ -63,16 +63,16 @@ void Controller:: pad(Catacomb& maze) {
         }
     }
 
-    if(maze.explorers().getMindFlay(maze.explorers().getPlayer()) == 1){
-        if(maze.explorers().getPlayer() == 1){
-            maze.explorers().setMindFlay(1, 0);
-            maze.explorers().setExplorer(2, maze.explorers().getX(2), maze.explorers().getY(2));
+    if(explorer.getMindFlay(explorer.getPlayer()) == 1){
+        if(explorer.getPlayer() == 1){
+            explorer.setMindFlay(1, 0);
+            explorer.setExplorer(2, explorer.getX(2), explorer.getY(2));
             
         } else {
-            maze.explorers().setMindFlay(2, 0);
-            maze.explorers().setExplorer(1, maze.explorers().getX(1), maze.explorers().getY(1));
+            explorer.setMindFlay(2, 0);
+            explorer.setExplorer(1, explorer.getX(1), explorer.getY(1));
         }
-        pad(maze);
+        pad(explorer);
         return;
     }
 }

@@ -1,14 +1,13 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-//#include "Dungeon.h"
-#include "Catacomb.h"
+#include "Explorer.h"
 
 class Controller {
     public:
-        Controller();
+    Controller();
 
-        void pad(Catacomb& maze);
+    void pad(Explorer& explorer);
 };
 
 #endif
