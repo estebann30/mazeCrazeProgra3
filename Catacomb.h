@@ -11,7 +11,7 @@ class Catacomb {
     vector<vector<Chunk*>> layout;
 
     void DFS(int p1x, int p1y, int p2x, int p2y, int room, int floor);
-    void BFS();
+    void BFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols);
 
     public:
     Catacomb();
