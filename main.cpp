@@ -16,38 +16,26 @@ int main() {
 
 
     explorer.dungeon().mazeMapping();
-    explorer.dungeon().tunneler();
 
     explorer.setExplorer(1, 0, 0);
-    explorer.setExplorer(2, 4, 4);
+    explorer.setExplorer(2, 6, 6);
 
-    explorer.changePlayer(1);
+    explorer.dungeon().tunneler();
 
     explorer.thombRaider();
 
-    //control.pad(explorer);
+    while(explorer.getWinner() == 0) {
 
-    //explorer.thombRaider();
-
-
-    int turns = 4;
-
-    while(turns > 0) {
-
-        cout << endl << "luego del cambio:" << endl;
+        cout << endl << "Turno del jugador: " << explorer.getPlayer() << endl;
 
         control.pad(explorer);
 
-        if(explorer.getPlayer() == 1) {
-            explorer.changePlayer(2);
-        } else {
-            explorer.changePlayer(1);
-        }
-        
         explorer.thombRaider();
 
-        --turns;
     }
+
+    cout << endl << "el ganador es el jugador: " << explorer.getWinner() << endl;
+
 
     return 0;
 }

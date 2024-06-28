@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Explorer::Explorer() : players(2, vector<int>(4, 0)), player(1) {}
+Explorer::Explorer() : players(2, vector<int>(4, 0)), player(1), winner(0) {}
 
 //[1][0] = JUGADOR 1 POSICION EN X
 //[2][1] = JUGADOR 2 POSICION EN Y
@@ -20,62 +20,169 @@ void Explorer:: setExplorer(int p, int x, int y){
 }
 
 void Explorer:: moveN(int p){
-    //players[p - 1][1]--; //norte
+    // players[p - 1][1]--; //norte
+
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
+    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
+    //cout << endl << "y actual: " << y << endl;
 
-    if(tile && tile->getNorth()) {
-        Chunk* tileN = tile->getNorth();
-        players[p - 1][0] = tileN->getFloor();
-        players[p - 1][1] = tileN->getRoom();
+    if(zone[x][y] && zone[x][y]->getNorth()) {
+        players[p - 1][0] = zone[x][y]->getNorth()->getRoom();
+        players[p - 1][1] = zone[x][y]->getNorth()->getFloor();
+
+        if(zone[x][y]->getNorth()->getContain() == '$') {
+            setWinner(getPlayer());
+        } else if(zone[x][y]->getNorth()->getContain() == '@') {
+            setMindFlay(getPlayer(), 1);
+            zone[x][y]->getNorth()->setContain('#');
+        } else if(zone[x][y]->getNorth()->getContain() == '&') {
+            addJumps(getPlayer());
+            zone[x][y]->getNorth()->setContain('#');
+        } else if(zone[x][y]->getContain() == '^') {
+            zone[x][y]->setNorth(nullptr);
+            zone[x][y]->setContain('#');
+        }
+        
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+            changePlayer();
+        } 
+    } else {
+        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '^' && zone[x - 1][y]) {
+            --players[p - 1][0];
+            deductJumps(getPlayer());
+            changePlayer();
+        } else {
+            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+        }
     }
 }
 
 void Explorer:: moveS(int p){
-    //players[p - 1][1]++; //sur
+    // players[p - 1][1]++; //sur
+
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
+    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
+    //cout << endl << "y actual: " << y << endl;
 
-    if(tile && tile->getSouth()) {
-        Chunk* tileS = tile->getSouth();
-        players[p - 1][0] = tileS->getFloor();
-        players[p - 1][1] = tileS->getRoom();
+    if(zone[x][y] && zone[x][y]->getSouth()) {
+        players[p - 1][0] = zone[x][y]->getSouth()->getRoom();
+        players[p - 1][1] = zone[x][y]->getSouth()->getFloor();
+
+        if(zone[x][y]->getSouth()->getContain() == '$') {
+            setWinner(getPlayer());
+        } else if(zone[x][y]->getSouth()->getContain() == '@') {
+            setMindFlay(getPlayer(), 1);
+            zone[x][y]->getSouth()->setContain('#');
+        } else if(zone[x][y]->getSouth()->getContain() == '&') {
+            addJumps(getPlayer());
+            zone[x][y]->getSouth()->setContain('#');
+        } else if(zone[x][y]->getContain() == 'v') {
+            zone[x][y]->setSouth(nullptr);
+            zone[x][y]->setContain('#');
+        } 
+
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+            changePlayer();
+        } 
+    } else {
+
+        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != 'v' && zone[x + 1][y]) {
+            ++players[p - 1][0];
+            deductJumps(getPlayer());
+            changePlayer();
+        } else {
+            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+        }
     }
+
 }
 
 void Explorer:: moveE(int p){
-    //players[p - 1][0]++; //este
+    // players[p - 1][0]++; //este
+
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
+    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
+    //cout << endl << "y actual: " << y << endl;
+    
+    if(zone[x][y] && zone[x][y]->getEast()) {
+        players[p - 1][0] = zone[x][y]->getEast()->getRoom();
+        players[p - 1][1] = zone[x][y]->getEast()->getFloor();
 
-    if(tile && tile->getEast()) {
-        Chunk* tileE = tile->getEast();
-        players[p - 1][0] = tileE->getFloor();
-        players[p - 1][1] = tileE->getRoom();
+        if(zone[x][y]->getEast()->getContain() == '$') {
+            setWinner(getPlayer());
+        } else if(zone[x][y]->getEast()->getContain() == '@') {
+            setMindFlay(getPlayer(), 1);
+            zone[x][y]->getEast()->setContain('#');
+        } else if(zone[x][y]->getEast()->getContain() == '&') {
+            addJumps(getPlayer());
+            zone[x][y]->getEast()->setContain('#');
+        } else if(zone[x][y]->getContain() == '>') {
+            zone[x][y]->setEast(nullptr);
+            zone[x][y]->setContain('#');
+        } 
+
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+            changePlayer();
+        } 
+    } else {
+
+        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '>' && zone[x ][y + 1]) {
+            ++players[p - 1][1];
+            deductJumps(getPlayer());
+            changePlayer();
+        } else {
+            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+        }
     }
 }
 
 void Explorer:: moveW(int p){
-    //players[p - 1][0]--; //oeste
+    // players[p - 1][0]--; //oeste
+
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
+    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
+    //cout << endl << "y actual: " << y << endl;
 
-    if(tile && tile->getWest()) {
-        Chunk* tileW = tile->getWest();
-        players[p - 1][0] = tileW->getFloor();
-        players[p - 1][1] = tileW->getRoom();
+    if(zone[x][y] && zone[x][y]->getWest()) {
+        players[p - 1][0] = zone[x][y]->getWest()->getRoom();
+        players[p - 1][1] = zone[x][y]->getWest()->getFloor();
+
+        if(zone[x][y]->getWest()->getContain() == '$') {
+            setWinner(getPlayer());
+        } else if(zone[x][y]->getWest()->getContain() == '@') {
+            setMindFlay(getPlayer(), 1);
+            zone[x][y]->getWest()->setContain('#');
+        } else if(zone[x][y]->getWest()->getContain() == '&') {
+            addJumps(getPlayer());
+            zone[x][y]->getWest()->setContain('#');
+        } else if(zone[x][y]->getContain() == '<') {
+            zone[x][y]->setWest(nullptr);
+            zone[x][y]->setContain('#');
+        } 
+
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+            changePlayer();
+        } 
+    } else {
+        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '<' && zone[x ][y - 1]) {
+            --players[p - 1][1];
+            deductJumps(getPlayer());
+            changePlayer();
+        } else {
+            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+        }
     }
 }
 
@@ -86,13 +193,8 @@ void Explorer:: moveNE(int p){
 
     int x = players[p - 1][0];
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
-
-    if(tile && tile->getNorthEast()) {
-        Chunk* tileNE = tile->getNorthEast();
-        players[p - 1][0] = tileNE->getFloor();
-        players[p - 1][1] = tileNE->getRoom();
-    }
+    
+    
 }
 
 void Explorer:: moveNW(int p){
@@ -102,13 +204,7 @@ void Explorer:: moveNW(int p){
 
     int x = players[p - 1][0];
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
-
-    if(tile && tile->getNorthWest()) {
-        Chunk* tileNW = tile->getNorthWest();
-        players[p - 1][0] = tileNW->getFloor();
-        players[p - 1][1] = tileNW->getRoom();
-    }
+    
 }
 
 void Explorer:: moveSE(int p){
@@ -118,13 +214,7 @@ void Explorer:: moveSE(int p){
 
     int x = players[p - 1][0];
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
-
-    if(tile && tile->getSouthEast()) {
-        Chunk* tileSE = tile->getSouthEast();
-        players[p - 1][0] = tileSE->getFloor();
-        players[p - 1][1] = tileSE->getRoom();
-    }
+    
 }
 
 void Explorer:: moveSW(int p){
@@ -134,17 +224,19 @@ void Explorer:: moveSW(int p){
 
     int x = players[p - 1][0];
     int y = players[p - 1][1];
-    Chunk* tile = zone[x][y];
+    
+}
 
-    if(tile && tile->getSouthWest()) {
-        Chunk* tileSW = tile->getSouthWest();
-        players[p - 1][0] = tileSW->getFloor();
-        players[p - 1][1] = tileSW->getRoom();
+void Explorer:: changePlayer(){
+    if(getPlayer() == 1) {
+        player = 2;
+    } else {
+        player = 1;
     }
 }
 
-void Explorer:: changePlayer(int p){
-    player = p;
+void Explorer:: setWinner(int p){
+    winner = p;
 }
 
 void Explorer:: setMindFlay(int p, int status){
@@ -157,6 +249,10 @@ void Explorer:: addJumps(int p){
 
 void Explorer:: deductJumps(int p){
     players[p - 1][3]--;
+}
+
+int Explorer:: getWinner() const{
+    return winner;
 }
 
 int Explorer:: getPlayer() const {
@@ -214,23 +310,23 @@ void Explorer:: thombRaider() {
             } else {
                 thomb[rr][cc] = zone[r][c]->getContain();
 
-                if(zone[r][c]->getFloor() == getX(1) && zone[r][c]->getRoom() == getY(1) && zone[r][c] != nullptr) {
+                if(zone[r][c]->getRoom() == getX(1) && zone[r][c]->getFloor() == getY(1) && zone[r][c] != nullptr) {
                     thomb[rr][cc] = '1';
-                } else if(zone[r][c]->getFloor() == getX(2) && zone[r][c]->getRoom() == getY(2) && zone[r][c] != nullptr) {
+                } else if(zone[r][c]->getRoom() == getX(2) && zone[r][c]->getFloor() == getY(2) && zone[r][c] != nullptr) {
                     thomb[rr][cc] = '2';
                 }
 
                 if(zone[r][c] != nullptr) {
-                    if(zone[r][c]->getEast() != nullptr) {
+                    if(zone[r][c]->getEast() != nullptr && zone[r][c]->getContain() != '>') {
                         thomb[rr][cc + 1] = '-';
                     }
-                    if(zone[r][c]->getSouth() != nullptr) {
+                    if(zone[r][c]->getSouth() != nullptr && zone[r][c]->getContain() != 'v') {
                         thomb[rr + 1][cc] = '|';
                     }
-                    if(zone[r][c]->getWest() != nullptr) {
+                    if(zone[r][c]->getWest() != nullptr && zone[r][c]->getContain() != '<') {
                         thomb[rr][cc - 1] = '-';
                     }
-                    if(zone[r][c]->getNorth() != nullptr) {
+                    if(zone[r][c]->getNorth() != nullptr && zone[r][c]->getContain() != '^') {
                         thomb[rr - 1][cc] = '|';
                     }
                 }

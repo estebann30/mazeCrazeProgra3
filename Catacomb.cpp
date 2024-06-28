@@ -10,17 +10,12 @@ using namespace std;
 Catacomb:: Catacomb() {}
 
 void Catacomb:: mazeMapping() {
-    int rooms = 5;
-    int floors = 5;
+    int rooms = 7;
+    int floors = 7;
     
-    layout = vector<vector<Chunk*>>(rooms, vector<Chunk*>(floors, nullptr));
-    //cout << endl << "Im working" << endl;
+    checking = true;
 
-    try {
-        DFS(0, 0, rooms -1, floors -1, rooms, floors);
-    } catch(const exception& e) {
-        cerr << "Exception caught in mazeMapping: " << e.what() << ". Retrying DFS..." << endl;
-        //mi respaldo
+    while(checking) {
         layout = vector<vector<Chunk*>>(rooms, vector<Chunk*>(floors, nullptr));
         DFS(0, 0, rooms -1, floors -1, rooms, floors);
     }
@@ -29,9 +24,6 @@ void Catacomb:: mazeMapping() {
 vector<vector<Chunk*>>& Catacomb:: mapped() {
     return layout;
 }
-
-
-//METER TESORO!!!!!!!!!
 
 void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
     stack<pair<int, int>> layer;
@@ -57,7 +49,6 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
         }
 
         layout[r][c]->setVisited(true);
-        path.push_back({r, c});
 
         if(r == p2x && c == p2y) {
             //cout << "destino r = " << r << endl;
@@ -71,8 +62,11 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
             }
             auto[tileX, tileY] = path[treasureChamber];
             layout[tileX][tileY]->setContain('$');
+            checking = false;
             return;
         }
+
+        path.push_back({r, c});
 
         // Explora las conexiones en las direcciones cardinales
         if(r > 0 && layout[r - 1][c] == nullptr) {
@@ -80,25 +74,9 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
         }
         if(r < rows - 1 && layout[r + 1][c] == nullptr) {
             layout[r + 1][c] = new Chunk();
-
-            // if(layout[r + 1][c] == layout[p2x][p2y]){
-            //     layout[r][c]->setSouth(layout[r + 1][c]);
-            //     layout[r + 1][c]->setNorth(layout[r][c]);
-            //     cout << "sali con r = " << r << endl;
-            //     cout << "sali con c = " << c << endl;
-            //     return;
-            // }
         }
         if(c < cols - 1 && layout[r][c + 1] == nullptr) {
             layout[r][c + 1] = new Chunk();
-
-            // if(layout[r][c + 1] == layout[p2x][p2y]){
-            //     layout[r][c]->setEast(layout[r][c + 1]);
-            //     layout[r][c + 1]->setWest(layout[r][c]);
-            //     cout << "sali con r = " << r << endl;
-            //     cout << "sali con c = " << c << endl;
-            //     return;
-            // }
         }
         if(c > 0 && layout[r][c - 1] == nullptr) {
             layout[r][c - 1] = new Chunk();
@@ -106,69 +84,55 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
 
         vector<int> paths = {1, 2, 3, 4};
         int passcode = 0;
-        int oddLoop = 1000;
 
         shuffle(paths.begin(), paths.end(), gen);
 
-        while(passcode == 0 && oddLoop > 0){
-
-            for (int link : paths) {
-                // Norte
-                if(link == 1 && r > 0 && layout[r - 1][c] != nullptr && !layout[r - 1][c]->getVisited()) {
-                    layout[r][c]->setNorth(layout[r - 1][c]);
-                    layout[r - 1][c]->setSouth(layout[r][c]);
-                    passcode = 1;
-                    break;
-                }
-                // Sur
-                if(link == 2 && r < rows - 1 && layout[r + 1][c] != nullptr && !layout[r + 1][c]->getVisited()) {
-                    layout[r][c]->setSouth(layout[r + 1][c]);
-                    layout[r + 1][c]->setNorth(layout[r][c]);
-                    passcode = 2;
-                    break;
-                }
-                // Este
-                if(link == 3 && c < cols - 1 && layout[r][c + 1] != nullptr && !layout[r][c + 1]->getVisited()) {
-                    layout[r][c]->setEast(layout[r][c + 1]);
-                    layout[r][c + 1]->setWest(layout[r][c]);
-                    passcode = 3;
-                    break;
-                }
-                // Oeste
-                if(link == 4 && c > 0 && layout[r][c - 1] != nullptr && !layout[r][c - 1]->getVisited()) {
-                    layout[r][c]->setWest(layout[r][c - 1]);
-                    layout[r][c - 1]->setEast(layout[r][c]);
-                    passcode = 4;
-                    break;
-                }
+        for (int link : paths) {
+            // Norte
+            if(link == 1 && r > 0 && layout[r - 1][c] != nullptr && !layout[r - 1][c]->getVisited()) {
+                layout[r][c]->setNorth(layout[r - 1][c]);
+                layout[r - 1][c]->setSouth(layout[r][c]);
+                passcode = 1;
+                break;
             }
-
-            if(passcode != 0) {
-                if(passcode == 1) {
-                    layer.push({r - 1, c});
-                } else if(passcode == 2) {
-                    layer.push({r + 1, c});
-                } else if(passcode == 3) {
-                    layer.push({r, c + 1});
-                } else if(passcode == 4) {
-                    layer.push({r, c - 1});
-                }
-            } else {
-                if(r + 1 < rows - 1) {
-                    r = r + 1;
-                }
-                if(c + 1 < cols - 1) {
-                    c = c + 1;
-                }
-                //cout << endl << "exploté en: " << r << ", " << c << endl;
-                --oddLoop;
+            // Sur
+            if(link == 2 && r < rows - 1 && layout[r + 1][c] != nullptr && !layout[r + 1][c]->getVisited()) {
+                layout[r][c]->setSouth(layout[r + 1][c]);
+                layout[r + 1][c]->setNorth(layout[r][c]);
+                passcode = 2;
+                break;
+            }
+            // Este
+            if(link == 3 && c < cols - 1 && layout[r][c + 1] != nullptr && !layout[r][c + 1]->getVisited()) {
+                layout[r][c]->setEast(layout[r][c + 1]);
+                layout[r][c + 1]->setWest(layout[r][c]);
+                passcode = 3;
+                break;
+            }
+            // Oeste
+            if(link == 4 && c > 0 && layout[r][c - 1] != nullptr && !layout[r][c - 1]->getVisited()) {
+                layout[r][c]->setWest(layout[r][c - 1]);
+                layout[r][c - 1]->setEast(layout[r][c]);
+                passcode = 4;
+                break;
             }
         }
+
+        if(passcode != 0) {
+            if(passcode == 1) {
+                layer.push({r - 1, c});
+            } else if(passcode == 2) {
+                layer.push({r + 1, c});
+            } else if(passcode == 3) {
+                layer.push({r, c + 1});
+            } else if(passcode == 4) {
+                layer.push({r, c - 1});
+            }
+        } 
+        
     }
-    throw runtime_error("Condición de error encontrada en DFS");
 }
 
-// hacer un void que agregue nodos restantes y conecte random con poderes
 void Catacomb:: tunneler(){
 
     int x = layout.size() - 1;
@@ -193,19 +157,19 @@ void Catacomb:: tunneler(){
                 layout[room][floor]->setFloor(floor);
             } 
             
-            int link = d2(gen);
-
             //conecta al menos 1 vez chunk aislados
+            int link = d2(gen);
             if(layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getWest() == nullptr) {
 
                 bool deadEnd = true;
-                while(deadEnd) {
+                int oddLoop = 100;
+
+                while(deadEnd && oddLoop > 0) {
                     if(link == 1 && room > 0 && layout[room - 1][floor] != nullptr && layout[room - 1][floor]->getSouth() == nullptr) {
                         layout[room][floor]->setNorth(layout[room - 1][floor]);
                         layout[room - 1][floor]->setSouth(layout[room][floor]);
                         deadEnd = false;
                     }
-                    //link = d2(gen);
                     if(link == 2 && room < layout.size() - 1 && layout[room + 1][floor] != nullptr && layout[room + 1][floor]->getNorth() == nullptr) {
                         layout[room][floor]->setSouth(layout[room + 1][floor]);
                         layout[room + 1][floor]->setNorth(layout[room][floor]);
@@ -217,37 +181,36 @@ void Catacomb:: tunneler(){
                         layout[room][floor + 1]->setWest(layout[room][floor]);
                         deadEnd = false;
                     }
-                    //link = d2(gen);
                     if (link == 1 && floor > 0 && layout[room][floor - 1] != nullptr && layout[room][floor - 1]->getEast() == nullptr) {
                         layout[room][floor]->setWest(layout[room][floor - 1]);
                         layout[room][floor - 1]->setEast(layout[room][floor]);
                         deadEnd = false;
                     }
                     link = d2(gen);
+                    --oddLoop;
                 }
             }
 
+            //portales random
             int warp = d8(gen);
             int axisX = coordenatesX(gen);
             int axisY = coordenatesY(gen);
-
-            //portales random
-            if((warp == 1 || warp == 2) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$') {
+            if((warp == 1 || warp == 2) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setNorth(layout[axisX][axisY]);
-                layout[room][floor]->setContain('w');
-            } else if((warp == 1 || warp == 2) && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setContain('^');
+            } else if((warp == 3 || warp == 4) && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setSouth(layout[axisX][axisY]);
-                layout[room][floor]->setContain('w');
-            } else if((warp == 1 || warp == 2) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setContain('v');
+            } else if((warp == 5 || warp == 6) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setEast(layout[axisX][axisY]);
-                layout[room][floor]->setContain('w');
-            } else if((warp == 1 || warp == 2) && layout[room][floor]->getWest() == nullptr && layout[room][floor]->getContain() != '$') {
+                layout[room][floor]->setContain('>');
+            } else if((warp == 7 || warp == 8) && layout[room][floor]->getWest() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setWest(layout[axisX][axisY]);
-                layout[room][floor]->setContain('w');
+                layout[room][floor]->setContain('<');
             }
 
-            int power = d8(gen);
             //asignacion de poderes
+            int power = d8(gen);
             if(layout[room][floor]->getContain() == '#'){
                 if(power == 1) {
                     //mindFlay
@@ -261,8 +224,6 @@ void Catacomb:: tunneler(){
     }
 }
 
+
 //faltan
-//saltos sobre paredes
 //verificar mindflay
-//desaparecer poder al usarlo
-//verificar que se añaden poderes

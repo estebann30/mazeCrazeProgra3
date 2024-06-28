@@ -16,6 +16,8 @@ class Explorer {
 
     int player;
 
+    int winner;
+
     //[1][0] = JUGADOR 1 POSICION EN X
     //[2][1] = JUGADOR 2 POSICION EN Y
     //[1][2] = JUGADOR 1 MOVIMIENTOS DEL PERSONAJE (si tiene 1 es solo él, si tiene 2 es para el rival)
@@ -47,13 +49,17 @@ class Explorer {
 
     void moveSW(int p);
 
-    void changePlayer(int p);
+    void changePlayer();
+
+    void setWinner(int p);
 
     void setMindFlay(int p, int status);
 
     void addJumps(int p);
 
     void deductJumps(int p);
+
+    int getWinner() const;
 
     int getPlayer() const;
 

@@ -4,6 +4,8 @@
 #include "Explorer.h"
 
 class Controller {
+    private:
+    int flayed;
     public:
     Controller();
 
