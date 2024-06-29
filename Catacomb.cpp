@@ -382,6 +382,3 @@ void Catacomb:: tunneler(){
     //random portals and powers
     random_warps_and_powers();     
 }
-
-//faltan
-//verificar mindflay
