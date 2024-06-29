@@ -24,17 +24,17 @@ int main() {
 
     explorer.thombRaider();
 
-    while(explorer.getWinner() == 0) {
+    // while(explorer.getWinner() == 0) {
 
-        cout << endl << "Turno del jugador: " << explorer.getPlayer() << endl;
+    //     cout << endl << "Turno del jugador: " << explorer.getPlayer() << endl;
 
-        control.pad(explorer);
+    //     control.pad(explorer);
 
-        explorer.thombRaider();
+    //     explorer.thombRaider();
 
-    }
+    // }
 
-    cout << endl << "el ganador es el jugador: " << explorer.getWinner() << endl;
+    // cout << endl << "el ganador es el jugador: " << explorer.getWinner() << endl;
 
 
     return 0;
