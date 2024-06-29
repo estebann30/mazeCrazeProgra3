@@ -27,116 +27,117 @@ vector<vector<Chunk*>>& Catacomb:: mapped() {
     return layout;
 }
 
-// void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
-//     stack<pair<int, int>> layer;
-//     layer.push({p1x, p1y});
+void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
+    stack<pair<int, int>> layer;
+    layer.push({p1x, p1y});
 
-//     //dejo mis huellas almacenadas para poner el tesoro a la mitad
-//     vector<pair<int, int>> path;
+    //dejo mis huellas almacenadas para poner el tesoro a la mitad
+    vector<pair<int, int>> path;
 
-//     // Aplicar un numero random
-//     random_device dice;
-//     mt19937 gen(dice());
+    // Aplicar un numero random
+    random_device dice;
+    mt19937 gen(dice());
     
-//     while(!layer.empty()) {
-//         auto [r, c] = layer.top();
-//         layer.pop();
+    while(!layer.empty()) {
+        auto [r, c] = layer.top();
+        layer.pop();
 
-//         if(r < 0 || r >= layout.size() || c < 0 || c >= layout[0].size() || (layout[r][c] != nullptr && layout[r][c]->getVisited())) {
-//             continue;
-//         }
+        if(r < 0 || r >= layout.size() || c < 0 || c >= layout[0].size() || (layout[r][c] != nullptr && layout[r][c]->getVisited())) {
+            continue;
+        }
 
-//         if(layout[r][c] == nullptr) {
-//             layout[r][c] = new Chunk();
-//         }
+        if(layout[r][c] == nullptr) {
+            layout[r][c] = new Chunk();
+        }
 
-//         layout[r][c]->setVisited(true);
+        layout[r][c]->setVisited(true);
 
-//         if(r == p2x && c == p2y) {
-//             //cout << "destino r = " << r << endl;
-//             //cout << "destino c = " << c << endl;
+        if(r == p2x && c == p2y) {
+            //cout << "destino r = " << r << endl;
+            //cout << "destino c = " << c << endl;
 
-//             //ubica el tesoro
-//             int step = path.size() % 2;
-//             int treasureChamber = path.size() / 2;
-//             if(step != 0) {
-//                 treasureChamber -= step;
-//             }
-//             auto[tileX, tileY] = path[treasureChamber];
-//             layout[tileX][tileY]->setContain('$');
-//             checking = false;
-//             return;
-//         }
+            //ubica el tesoro
+            int step = path.size() % 2;
+            int treasureChamber = path.size() / 2;
+            if(step != 0) {
+                treasureChamber -= step;
+            }
+            auto[tileX, tileY] = path[treasureChamber];
+            layout[tileX][tileY]->setContain('$');
+            checking = false;
+            return;
+        }
 
-//         path.push_back({r, c});
+        path.push_back({r, c});
 
-//         // Explora las conexiones en las direcciones cardinales
-//         if(r > 0 && layout[r - 1][c] == nullptr) {
-//             layout[r - 1][c] = new Chunk();
-//         }
-//         if(r < rows - 1 && layout[r + 1][c] == nullptr) {
-//             layout[r + 1][c] = new Chunk();
-//         }
-//         if(c < cols - 1 && layout[r][c + 1] == nullptr) {
-//             layout[r][c + 1] = new Chunk();
-//         }
-//         if(c > 0 && layout[r][c - 1] == nullptr) {
-//             layout[r][c - 1] = new Chunk();
-//         }
+        // Explora las conexiones en las direcciones cardinales
+        if(r > 0 && layout[r - 1][c] == nullptr) {
+            layout[r - 1][c] = new Chunk();
+        }
+        if(r < rows - 1 && layout[r + 1][c] == nullptr) {
+            layout[r + 1][c] = new Chunk();
+        }
+        if(c < cols - 1 && layout[r][c + 1] == nullptr) {
+            layout[r][c + 1] = new Chunk();
+        }
+        if(c > 0 && layout[r][c - 1] == nullptr) {
+            layout[r][c - 1] = new Chunk();
+        }
 
-//         vector<int> paths = {1, 2, 3, 4};
-//         int passcode = 0;
+        vector<int> paths = {1, 2, 3, 4};
+        int passcode = 0;
 
-//         shuffle(paths.begin(), paths.end(), gen);
+        shuffle(paths.begin(), paths.end(), gen);
 
-//         for (int link : paths) {
-//             // Norte
-//             if(link == 1 && r > 0 && layout[r - 1][c] != nullptr && !layout[r - 1][c]->getVisited()) {
-//                 layout[r][c]->setNorth(layout[r - 1][c]);
-//                 layout[r - 1][c]->setSouth(layout[r][c]);
-//                 passcode = 1;
-//                 break;
-//             }
-//             // Sur
-//             if(link == 2 && r < rows - 1 && layout[r + 1][c] != nullptr && !layout[r + 1][c]->getVisited()) {
-//                 layout[r][c]->setSouth(layout[r + 1][c]);
-//                 layout[r + 1][c]->setNorth(layout[r][c]);
-//                 passcode = 2;
-//                 break;
-//             }
-//             // Este
-//             if(link == 3 && c < cols - 1 && layout[r][c + 1] != nullptr && !layout[r][c + 1]->getVisited()) {
-//                 layout[r][c]->setEast(layout[r][c + 1]);
-//                 layout[r][c + 1]->setWest(layout[r][c]);
-//                 passcode = 3;
-//                 break;
-//             }
-//             // Oeste
-//             if(link == 4 && c > 0 && layout[r][c - 1] != nullptr && !layout[r][c - 1]->getVisited()) {
-//                 layout[r][c]->setWest(layout[r][c - 1]);
-//                 layout[r][c - 1]->setEast(layout[r][c]);
-//                 passcode = 4;
-//                 break;
-//             }
-//         }
+        for (int link : paths) {
+            // Norte
+            if(link == 1 && r > 0 && layout[r - 1][c] != nullptr && !layout[r - 1][c]->getVisited()) {
+                layout[r][c]->setNorth(layout[r - 1][c]);
+                layout[r - 1][c]->setSouth(layout[r][c]);
+                passcode = 1;
+                break;
+            }
+            // Sur
+            if(link == 2 && r < rows - 1 && layout[r + 1][c] != nullptr && !layout[r + 1][c]->getVisited()) {
+                layout[r][c]->setSouth(layout[r + 1][c]);
+                layout[r + 1][c]->setNorth(layout[r][c]);
+                passcode = 2;
+                break;
+            }
+            // Este
+            if(link == 3 && c < cols - 1 && layout[r][c + 1] != nullptr && !layout[r][c + 1]->getVisited()) {
+                layout[r][c]->setEast(layout[r][c + 1]);
+                layout[r][c + 1]->setWest(layout[r][c]);
+                passcode = 3;
+                break;
+            }
+            // Oeste
+            if(link == 4 && c > 0 && layout[r][c - 1] != nullptr && !layout[r][c - 1]->getVisited()) {
+                layout[r][c]->setWest(layout[r][c - 1]);
+                layout[r][c - 1]->setEast(layout[r][c]);
+                passcode = 4;
+                break;
+            }
+        }
 
-//         if(passcode != 0) {
-//             if(passcode == 1) {
-//                 layer.push({r - 1, c});
-//             } else if(passcode == 2) {
-//                 layer.push({r + 1, c});
-//             } else if(passcode == 3) {
-//                 layer.push({r, c + 1});
-//             } else if(passcode == 4) {
-//                 layer.push({r, c - 1});
-//             }
-//         } 
+        if(passcode != 0) {
+            if(passcode == 1) {
+                layer.push({r - 1, c});
+            } else if(passcode == 2) {
+                layer.push({r + 1, c});
+            } else if(passcode == 3) {
+                layer.push({r, c + 1});
+            } else if(passcode == 4) {
+                layer.push({r, c - 1});
+            }
+        } 
         
-//     }
-// }
+    }
+}
 
 void Catacomb::BFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
-    queue<pair<int, int>> layer; // Usar una cola en lugar de una pila
+    
+    queue<pair<int, int>> layer;
     layer.push({p1x, p1y});
 
     // Dejo mis huellas almacenadas para poner el tesoro a la mitad
@@ -147,8 +148,8 @@ void Catacomb::BFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
     mt19937 gen(dice());
     
     while (!layer.empty()) {
-        auto [r, c] = layer.front(); // Obtener el frente de la cola en lugar de la cima de la pila
-        layer.pop(); // Sacar el elemento de la cola
+        auto [r, c] = layer.front();
+        layer.pop(); 
 
         if (r < 0 || r >= layout.size() || c < 0 || c >= layout[0].size() || (layout[r][c] != nullptr && layout[r][c]->getVisited())) {
             continue;
@@ -161,7 +162,7 @@ void Catacomb::BFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
         layout[r][c]->setVisited(true);
 
         if (r == p2x && c == p2y) {
-            // ubica el tesoro
+            //Set treasure
             int step = path.size() % 2;
             int treasureChamber = path.size() / 2;
             if (step != 0) {
@@ -197,25 +198,25 @@ void Catacomb::BFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
             if (link == 1 && r > 0 && layout[r - 1][c] != nullptr && !layout[r - 1][c]->getVisited()) {
                 layout[r][c]->setNorth(layout[r - 1][c]);
                 layout[r - 1][c]->setSouth(layout[r][c]);
-                layer.push({r - 1, c}); // Empujar en la cola
+                layer.push({r - 1, c});
             }
             // Sur
             if (link == 2 && r < rows - 1 && layout[r + 1][c] != nullptr && !layout[r + 1][c]->getVisited()) {
                 layout[r][c]->setSouth(layout[r + 1][c]);
                 layout[r + 1][c]->setNorth(layout[r][c]);
-                layer.push({r + 1, c}); // Empujar en la cola
+                layer.push({r + 1, c}); 
             }
             // Este
             if (link == 3 && c < cols - 1 && layout[r][c + 1] != nullptr && !layout[r][c + 1]->getVisited()) {
                 layout[r][c]->setEast(layout[r][c + 1]);
                 layout[r][c + 1]->setWest(layout[r][c]);
-                layer.push({r, c + 1}); // Empujar en la cola
+                layer.push({r, c + 1}); 
             }
             // Oeste
             if (link == 4 && c > 0 && layout[r][c - 1] != nullptr && !layout[r][c - 1]->getVisited()) {
                 layout[r][c]->setWest(layout[r][c - 1]);
                 layout[r][c - 1]->setEast(layout[r][c]);
-                layer.push({r, c - 1}); // Empujar en la cola
+                layer.push({r, c - 1}); 
             }
         }
     }
