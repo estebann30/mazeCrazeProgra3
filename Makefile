@@ -10,7 +10,7 @@ OBJS = $(SRCS:.cpp=.o)
 EXEC = game
 
 # Definimos las librerías de SFML
-SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
+SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 # Regla por defecto
 all: $(EXEC)

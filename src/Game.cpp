@@ -88,6 +88,12 @@ Game::Game(Explorer& explorer,  Controller& controller)
     if (!player_2_wins_texture.loadFromFile("assets/player2_wins.jpeg")) {
         throw std::runtime_error("Error al cargar la imagen de ganador");
     }
+    if (!ambientMusicBuffer.loadFromFile("assets/dungeon_ambient_1.ogg")) {
+        throw std::runtime_error("Error al cargar el sonido ambiente");
+    
+    }
+    
+    ambientMusicSound.setBuffer(ambientMusicBuffer);
 
     player_1_wins_sprite.setTexture(player_1_wins_texture);
     player_1_wins_sprite.setScale(static_cast<float>(WINDOW_WIDTH) / player_1_wins_texture.getSize().x, static_cast<float>(WINDOW_HEIGHT) / player_1_wins_texture.getSize().y);
@@ -113,6 +119,9 @@ Game::Game(Explorer& explorer,  Controller& controller)
 }
 
 void Game::run(Explorer& explorer,  Controller& controller) {
+
+    ambientMusicSound.setLoop(true);
+    ambientMusicSound.play();
 
     while (window.isOpen()) {
 
