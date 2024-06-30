@@ -4,27 +4,28 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Config.h"
-#include "Explorer.h"
 
 class Cell {
 public:
     Cell();
-    void draw(sf::RenderWindow& window, Explorer& explorer, int x, int y);
-    sf::Sprite cellSprite; //background
+    void draw(sf::RenderWindow& window);
+    void drawNorth(sf::RenderWindow& window);
+    void drawEast(sf::RenderWindow& window);
+    void drawSouth(sf::RenderWindow& window);
+    void drawWest(sf::RenderWindow& window);
+
+    sf::Sprite cellSprite; //floor
 
 private:
-    void handleWalls();
-    void adjustWallSprites(const sf::Vector2u &textureSize); // const sf::Vector2u &textureSize
+    void adjustWallSprites(const sf::Vector2u &textureSize);
     bool loadTextures();
 
-
-    //sf::Sprite cellSprite; //background
     sf::Sprite upperWallSprite;
     sf::Sprite leftWallSprite;
     sf::Sprite rightWallSprite;
     sf::Sprite belowWallSprite;
 
-    sf::Texture cellTexture;  //background
+    sf::Texture cellTexture;      //floor
     sf::Texture upperWallTexture;
     sf::Texture leftWallTexture;
     sf::Texture rightWallTexture;

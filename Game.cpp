@@ -133,70 +133,127 @@ void Game::update(Explorer& explorer) {
 void Game::render(Explorer& explorer) {
     auto& zone = explorer.dungeon().mapped();
 
+    // if(startedOnce == false){
+    //     explorer.thombRaider();
+    // }
+
     window.clear();
 
     window.draw(spriteFondo);
 
-    for (int x = 0; x < totalSpritesX; x++) {
-        for (int y = 0; y < totalSpritesY; y++) {
+    for (int x = 0; x < zone.size(); x++) {
+        for (int y = 0; y < zone[0].size(); y++) {
 
-            if(startedOnce == false){
-                cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
-            }
+            
+            cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
+            
             
 
-            cell[x][y].draw(window, explorer, x, y);
+            //cell[x][y].draw(window);
+            
+            if(zone[y][x] != nullptr){
+                
+                cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
+                cell[x][y].draw(window);
 
-            if (zone[x][y]->getContain()=='@') {
+                if (zone[y][x]->getNorth() == nullptr) {
+                    cell[x][y].drawNorth(window);
+                }
+                if (zone[y][x]->getEast() == nullptr) {
+                    cell[x][y].drawEast(window);
+                }
+                if (zone[y][x]->getWest() == nullptr) {
+                    cell[x][y].drawWest(window);
+                }
+                if (zone[y][x]->getSouth() == nullptr) {
+                    cell[x][y].drawSouth(window);
+                }
+
+
+            }
+
+            // if (zone[x][y]->getNorth() == nullptr) {
+            //     cell[x][y].drawNorth(window);
+            // }
+            // if (zone[x][y]->getEast() == nullptr) {
+            //     cell[x][y].drawEast(window);
+            // }
+            // if (zone[x][y]->getWest() == nullptr) {
+            //     cell[x][y].drawWest(window);
+            // }
+            // if (zone[x][y]->getSouth() == nullptr) {
+            //     cell[x][y].drawSouth(window);
+            // }
+
+            // bool norte = true;
+            // bool sur = true;
+            // bool este = true;
+            // bool oeste = true;
+
+            // if (norte) {
+            //     cell[x][y].drawNorth(window);
+            // }
+            // if (este) {
+            //     cell[x][y].drawEast(window);
+            // }
+            // if (oeste) {
+            //     cell[x][y].drawWest(window);
+            // }
+            // if (sur) {
+            //     cell[x][y].drawSouth(window);
+            // }
+
+
+            if (zone[y][x]->getContain()=='@') {
                 sf::Sprite powerSprite(powerTexture1);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture1.getSize().x, 0.6f * CELL_SIZE / powerTexture1.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-             if (zone[x][y]->getContain()=='%') {
+             if (zone[y][x]->getContain()=='%') {
                  sf::Sprite powerSprite(powerTexture2);
                  powerSprite.setScale(0.6f * CELL_SIZE / powerTexture2.getSize().x, 0.6f * CELL_SIZE / powerTexture2.getSize().y);
                  powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                       offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                  window.draw(powerSprite);
              }
-            if (zone[x][y]->getContain()=='<') {
+            if (zone[y][x]->getContain()=='<') {
                 sf::Sprite powerSprite(powerTexture3);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (zone[x][y]->getContain()=='>') {
+            if (zone[y][x]->getContain()=='>') {
                 sf::Sprite powerSprite(powerTexture3);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (zone[x][y]->getContain()=='v') {
+            if (zone[y][x]->getContain()=='v') {
                 sf::Sprite powerSprite(powerTexture3);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (zone[x][y]->getContain()=='^') {
+            if (zone[y][x]->getContain()=='^') {
                 sf::Sprite powerSprite(powerTexture3);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (zone[x][y]->getContain()=='&') {
+            if (zone[y][x]->getContain()=='&') {
                 sf::Sprite powerSprite(powerTexture4);
                 powerSprite.setScale(0.6f* CELL_SIZE / powerTexture4.getSize().x, 0.6f * CELL_SIZE / powerTexture4.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (zone[x][y]->getContain()=='$') {
+            if (zone[y][x]->getContain()=='$') {
                 sf::Sprite powerSprite(treasureTexture);
                 powerSprite.setScale(0.3f * CELL_SIZE / treasureTexture.getSize().x, 0.3f * CELL_SIZE / treasureTexture.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,

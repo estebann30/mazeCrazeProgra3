@@ -4,11 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include "Node.h"
-//#include "Grid.h"
 #include "Config.h"
 #include "CellUI.hpp"
-//#include "MenuUI.hpp"
 #include "WindowSizeException.h"
 #include "Chunk.h"
 #include "Explorer.h"
@@ -50,7 +47,6 @@ private:
     int totalSpritesY;
     float offsetX;
     float offsetY;
-    //Grid grid;
     sf::Texture fondoTexture;
     sf::Sprite spriteFondo;
     sf::Font font;

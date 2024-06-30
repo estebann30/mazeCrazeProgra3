@@ -25,7 +25,7 @@ int main(){
 
     explorer.dungeon().tunneler(); //le añade portales, poderes, conexiones (tambien quita conexiones)
 
-    //explorer.thombRaider(); //
+    explorer.thombRaider(); //
 
 
     try {

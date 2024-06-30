@@ -14,16 +14,12 @@ Cell::Cell() {
     leftWallSprite.setTexture(leftWallTexture);
     rightWallSprite.setTexture(rightWallTexture);
     belowWallSprite.setTexture(belowWallTexture);
-
-    // Adjust wall sprites
-    //sf::Vector2u textureSize = cellTexture.getSize();
-    //adjustWallSprites(textureSize);
   
 }
 
 bool Cell::loadTextures() {
 
-    if (!cellTexture.loadFromFile("./assets/todoAbierto.jpeg") || //background
+    if (!cellTexture.loadFromFile("./assets/suelo.jpg") || //background
         !upperWallTexture.loadFromFile("./assets/cinta.jpg") ||  // ../assets/tapadoArribaa.jpeg
         !leftWallTexture.loadFromFile("./assets/cintaVertical.jpg") ||        
         !rightWallTexture.loadFromFile("./assets/cintaVertical.jpg") ||
@@ -47,15 +43,11 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
     float right_and_left_scaleY = static_cast<float>(CELL_SIZE) / right_and_left_wallTextureSize.y;
 
     // Adjust the scales to fit within the scaled cell sprite
-    //up_and_below_scaleX *= 0.1f;
-    //right_and_left_scaleY *= 0.1f;
-
-
     upperWallSprite.setScale(up_and_below_scaleX, 0.1f);
     belowWallSprite.setScale(up_and_below_scaleX, 0.1f);
-    leftWallSprite.setScale(0.1f, right_and_left_scaleY);
-    rightWallSprite.setScale(0.1f, right_and_left_scaleY);
-    //static_cast<float>(CELL_SIZE) / cellTexture.getSize().x, static_cast<float>(CELL_SIZE) / cellTexture.getSize().y
+    leftWallSprite.setScale(0.05f, right_and_left_scaleY);
+    rightWallSprite.setScale(0.05f, right_and_left_scaleY);
+    
     // Position walls at the edges of the scaled cell sprite
     sf::FloatRect cellBounds = cellSprite.getGlobalBounds();
     upperWallSprite.setPosition(cellBounds.left, cellBounds.top);
@@ -65,27 +57,56 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
 }
 
 
-void Cell::draw(sf::RenderWindow& window, Explorer& explorer, int x, int y) { 
-    auto& zone = explorer.dungeon().mapped();
-    sf::Vector2u textureSize = cellTexture.getSize();
-    adjustWallSprites(textureSize);
+void Cell::draw(sf::RenderWindow& window) { 
     
     window.draw(cellSprite);
 
+    // if (zone[x][y]->getNorth() == nullptr) {
+    //     window.draw(upperWallSprite);
+    // }
+    // if (zone[x][y]->getEast() == nullptr) {
+    //     window.draw(rightWallSprite);
+    // }
+    // if (zone[x][y]->getWest() == nullptr) {
+    //     window.draw(leftWallSprite);
+    // }
+    // if (zone[x][y]->getSouth() == nullptr) {
+    //     window.draw(belowWallSprite);
+    // }
+}
+
+void Cell::drawNorth(sf::RenderWindow& window){
+
+    sf::Vector2u textureSize = cellTexture.getSize();
     adjustWallSprites(textureSize);
 
-    if (zone[x][y]->getNorth() == nullptr) {
-        window.draw(upperWallSprite);
-    }
-    if (zone[x][y]->getEast() == nullptr) {
-        window.draw(rightWallSprite);
-    }
-    if (zone[x][y]->getWest() == nullptr) {
-        window.draw(leftWallSprite);
-    }
-    if (zone[x][y]->getSouth() == nullptr) {
-        window.draw(belowWallSprite);
-    }
+    window.draw(upperWallSprite);
 
-    //window.display();
+}
+
+void Cell::drawEast(sf::RenderWindow& window){
+
+    sf::Vector2u textureSize = cellTexture.getSize();
+    adjustWallSprites(textureSize);
+
+    window.draw(rightWallSprite);
+
+}
+
+void Cell::drawSouth(sf::RenderWindow& window){
+
+    sf::Vector2u textureSize = cellTexture.getSize();
+    adjustWallSprites(textureSize);
+
+    window.draw(belowWallSprite);
+
+}
+
+void Cell::drawWest(sf::RenderWindow& window){
+    
+    sf::Vector2u textureSize = cellTexture.getSize();
+    adjustWallSprites(textureSize);
+
+    window.draw(leftWallSprite);
+
 }
