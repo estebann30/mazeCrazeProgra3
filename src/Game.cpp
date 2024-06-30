@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(Explorer& explorer)
+Game::Game(Explorer& explorer,  Controller& controller)
     : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MazeCraze"),
       turnPlayer(true){
     
@@ -57,6 +57,7 @@ Game::Game(Explorer& explorer)
     spriteFondo.setTexture(fondoTexture);
     spriteFondo.setScale(static_cast<float>(WINDOW_WIDTH) / fondoTexture.getSize().x, static_cast<float>(WINDOW_HEIGHT) / fondoTexture.getSize().y);
 
+
     if (!powerTexture1.loadFromFile("assets/cambioDeTurnos.png")) {
         std::cerr << "Error al cargar la imagen del poder 1" << std::endl;
         throw std::runtime_error("Error al cargar la imagen del poder 1");
@@ -81,6 +82,19 @@ Game::Game(Explorer& explorer)
         std::cerr << "Error al cargar la fuente" << std::endl;
         throw std::runtime_error("Error al cargar la fuente");
     }
+    if (!player_1_wins_texture.loadFromFile("assets/player1_wins.jpeg")) {
+        throw std::runtime_error("Error al cargar la imagen de ganador");
+    }
+    if (!player_2_wins_texture.loadFromFile("assets/player2_wins.jpeg")) {
+        throw std::runtime_error("Error al cargar la imagen de ganador");
+    }
+
+    player_1_wins_sprite.setTexture(player_1_wins_texture);
+    player_1_wins_sprite.setScale(static_cast<float>(WINDOW_WIDTH) / player_1_wins_texture.getSize().x, static_cast<float>(WINDOW_HEIGHT) / player_1_wins_texture.getSize().y);
+
+    player_2_wins_sprite.setTexture(player_2_wins_texture);
+    player_2_wins_sprite.setScale(static_cast<float>(WINDOW_WIDTH) / player_2_wins_texture.getSize().x, static_cast<float>(WINDOW_HEIGHT) / player_2_wins_texture.getSize().y);
+
 
     player1JumpText.setFont(font);
     player1JumpText.setCharacterSize(20);
@@ -98,22 +112,37 @@ Game::Game(Explorer& explorer)
     turnText.setPosition(WINDOW_WIDTH - 180, 10);
 }
 
-void Game::run(Explorer& explorer) {
+void Game::run(Explorer& explorer,  Controller& controller) {
 
     while (window.isOpen()) {
+
+        processEvents(explorer, controller);
         
-        processEvents();
-        update(explorer);
-        render(explorer);
-    }
+        if(explorer.getWinner() == 0){
+            update(explorer);
+            render(explorer);
+        }
+
+        if (explorer.getWinner() == 2){
+            window.clear();
+            window.draw(player_2_wins_sprite);
+            window.display();
+        }
+
+        if (explorer.getWinner() == 1){
+            window.clear();
+            window.draw(player_1_wins_sprite);
+            window.display();
+        };
+    }   
 }
 
-void Game::processEvents() {
+void Game::processEvents(Explorer& explorer,  Controller& controller) {
     sf::Event event;
     while (window.pollEvent(event)) {
         switch (event.type) {
             case sf::Event::KeyPressed:
-                handlePlayerInput(event.key.code, true);
+                handlePlayerInput(event.key.code, true, explorer, controller);
                 break;
             case sf::Event::Closed:
                 window.close();
@@ -123,8 +152,7 @@ void Game::processEvents() {
 }
 
 void Game::update(Explorer& explorer) {
-    // checkPowerCollision(player1);
-    // checkPowerCollision(player2);
+
     player1JumpText.setString("Player 1 Jumps: " + std::to_string(explorer.getJumps(1)));
     player2JumpText.setString("Player 2 Jumps: " + std::to_string(explorer.getJumps(2)));
     turnText.setString(("Player "+std::to_string(explorer.getPlayer())+ " Turn"));
@@ -212,11 +240,11 @@ void Game::render(Explorer& explorer) {
 
     startedOnce = true;
 
-    player1.setPosition(sf::Vector2f(offsetX + explorer.getX(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().width) / 2.0f,
-                            offsetY + explorer.getY(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().height) / 2.0f));
+    player1.setPosition(sf::Vector2f(offsetX + explorer.getY(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().width) / 2.0f,
+                            offsetY + explorer.getX(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().height) / 2.0f));
         window.draw(player1);
-    player2.setPosition(sf::Vector2f(offsetX + explorer.getX(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().width) / 2.0f,
-                        offsetY + explorer.getY(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().height) / 2.0f));
+    player2.setPosition(sf::Vector2f(offsetX + explorer.getY(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().width) / 2.0f,
+                        offsetY + explorer.getX(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().height) / 2.0f));
         window.draw(player2);
 
     
@@ -226,27 +254,25 @@ void Game::render(Explorer& explorer) {
     window.display();
 }
 
-void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
+void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed, Explorer& explorer, Controller& controller) {
     if (!isPressed) return;
 
-    std::string direction;
-    std::string currentPlayer = (turnPlayer) ? "player1" : "player2";
+    char direction;
 
-    if (currentPlayer == "player1") {
-        if (key == sf::Keyboard::W) direction = "up";
-        else if (key == sf::Keyboard::S) direction = "down";
-        else if (key == sf::Keyboard::A) direction = "left";
-        else if (key == sf::Keyboard::D) direction = "right";
-    } else if (currentPlayer == "player2") {
-        if (key == sf::Keyboard::Up) direction = "up";
-        else if (key == sf::Keyboard::Down) direction = "down";
-        else if (key == sf::Keyboard::Left) direction = "left";
-        else if (key == sf::Keyboard::Right) direction = "right";
+    if (explorer.getPlayer() == 1) {
+        if (key == sf::Keyboard::W) direction = 'w';
+        else if (key == sf::Keyboard::S) direction = 's';
+        else if (key == sf::Keyboard::A) direction = 'a';
+        else if (key == sf::Keyboard::D) direction = 'd';
+    } else if (explorer.getPlayer() == 2) {
+        if (key == sf::Keyboard::Up) direction = 'G';
+        else if (key == sf::Keyboard::Down) direction = 'H';
+        else if (key == sf::Keyboard::Left) direction = 'K';
+        else if (key == sf::Keyboard::Right) direction = 'J';
     }
 
-    if (!direction.empty()) {
-        sendEventToBackend("move", currentPlayer, direction);
-        turnPlayer = !turnPlayer; 
+    if (direction != '\0') { //no es nulo
+        sendEventToBackend(direction, explorer, controller);
     }
 }
 
@@ -272,16 +298,8 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
 //     }
 // }
 
-// void Game::receiveGrid(Explorer& explorer) {
-//     auto& zone= explorer.dungeon().mapped();
-//     for (int x = 0; x < MAZE_WIDTH; ++x) {
-//         for (int y = 0; y < MAZE_HEIGHT; ++y) {
-//             grid.setNode(x, y, zone[x][y]);
-//         }
-//     }
-// }
-
-void Game::sendEventToBackend(const std::string& event, const std::string& player, const std::string& direction) {
-    std::cout << "Evento enviado al backend: " << event << " Jugador: " << player << " Dirección: " << direction << std::endl;
+void Game::sendEventToBackend(char direction, Explorer& explorer, Controller& controller) {
+    //std::cout << "Evento enviado al backend: " << event << " Jugador: " << player << " Dirección: " << direction << std::endl;
+    controller.pad(explorer, direction);
 }
 

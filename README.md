@@ -32,8 +32,11 @@ La interfaz gráfica fue hecha en SFML
 # Requisitos para correr el programa
 
 Tener SFML instalado
+
 Tener C++ y su compilador instalados
+
 Tener CMake instalado
+
 Clonar el repositorio: https://github.com/estebann30/mazeCrazeProgra3.git
 
 # Cómo correr el programa

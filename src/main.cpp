@@ -15,7 +15,7 @@ using namespace std;
 int main(){
 
     Explorer explorer;
-    //Controller control;
+    Controller control;
 
 
     explorer.dungeon().mazeMapping(); //crea la matriz
@@ -29,11 +29,10 @@ int main(){
 
 
     try {
-        Game game(explorer);
+        Game game(explorer, control);
         //Menu menu();
 
-        game.run(explorer);
-        
+        game.run(explorer, control);
         
     } catch (const WindowSizeException& e){
         std::cerr << "Error: " << e.what() << std::endl;

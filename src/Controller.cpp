@@ -9,14 +9,13 @@ Controller:: Controller() {}
 
 
 //leer la entrada
-void Controller:: pad(Explorer& explorer) {
-    char keybind;
-    cin >> keybind;
+void Controller:: pad(Explorer& explorer, char keybind) {
+    //char keybind;
+    //cin >> keybind;
 
     if(explorer.getPlayer() == 1 || flayed == 2){
         switch (keybind){
             case 'w':
-            case 'W':
                 if(flayed == 2) {
                     explorer.moveN(2);
                     flayed = 0;
@@ -25,7 +24,6 @@ void Controller:: pad(Explorer& explorer) {
                 }
                 break;
             case 'a':
-            case 'A':
                 if(flayed == 2) {
                     explorer.moveW(2);
                     flayed = 0;
@@ -34,7 +32,6 @@ void Controller:: pad(Explorer& explorer) {
                 }
                 break;
             case 's':
-            case 'S':
                 if(flayed == 2) {
                     explorer.moveS(2);
                     flayed = 0;
@@ -43,7 +40,6 @@ void Controller:: pad(Explorer& explorer) {
                 }
                 break;
             case 'd':
-            case 'D':
                 if(flayed == 2) {
                     explorer.moveE(2);
                     flayed = 0;
@@ -56,13 +52,13 @@ void Controller:: pad(Explorer& explorer) {
         }
     } else if(explorer.getPlayer() == 2 || flayed == 1) {
         //flechas del teclado aqui
-        char arrowBind;
+        //char arrowBind;
 
-        if(keybind == '\033'){
-            cin >> arrowBind;
-            cin >> arrowBind;
-            switch (arrowBind){
-                case 'A':
+        // if(keybind == '\033'){
+        //     cin >> arrowBind;
+        //     cin >> arrowBind;
+            switch (keybind){
+                case 'G':
                     if(flayed == 1) {
                         explorer.moveN(1);
                         flayed = 0;
@@ -70,7 +66,7 @@ void Controller:: pad(Explorer& explorer) {
                         explorer.moveN(2);
                     }
                     break;
-                case 'B':
+                case 'H':
                     if(flayed == 1) {
                         explorer.moveS(1);
                         flayed = 0;
@@ -78,7 +74,7 @@ void Controller:: pad(Explorer& explorer) {
                         explorer.moveS(2);
                     }
                     break;
-                case 'C':
+                case 'J':
                     if(flayed == 1) {
                         explorer.moveE(1);
                         flayed = 0;
@@ -86,7 +82,7 @@ void Controller:: pad(Explorer& explorer) {
                         explorer.moveE(2);
                     }
                     break;
-                case 'D':
+                case 'K':
                     if(flayed == 1) {
                         explorer.moveW(1);
                         flayed = 0;
@@ -97,7 +93,7 @@ void Controller:: pad(Explorer& explorer) {
                 default:
                     break;
             }
-        }
+        //}
     }
 
     if(explorer.getMindFlay(explorer.getPlayer()) == 1){
@@ -106,13 +102,13 @@ void Controller:: pad(Explorer& explorer) {
             explorer.setMindFlay(1, 0);
             explorer.setExplorer(2, explorer.getX(2), explorer.getY(2));
             flayed = 2;
-            pad(explorer);
+            pad(explorer, keybind);
         } else {
             cout << endl << "Jugador 2 controla al jugador 1" << endl;
             explorer.setMindFlay(2, 0);
             explorer.setExplorer(1, explorer.getX(1), explorer.getY(1));
             flayed = 1;
-            pad(explorer);
+            pad(explorer, keybind);
         }
         //pad(explorer);
         
@@ -121,10 +117,10 @@ void Controller:: pad(Explorer& explorer) {
     if(explorer.getDoublePlay(explorer.getPlayer()) == 1){
         if(explorer.getPlayer() == 1){
             explorer.deductDoublePlay(1);
-            pad(explorer);
+            pad(explorer, keybind);
         }else{
             explorer.deductDoublePlay(2);
-            pad(explorer);
+            pad(explorer, keybind);
         }
     }
 }

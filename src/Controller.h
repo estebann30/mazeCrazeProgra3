@@ -9,7 +9,7 @@ class Controller {
     public:
     Controller();
 
-    void pad(Explorer& explorer);
+    void pad(Explorer& explorer, char keybind);
 };
 
 #endif

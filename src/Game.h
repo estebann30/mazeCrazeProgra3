@@ -6,24 +6,26 @@
 #include <vector>
 #include "Config.h"
 #include "CellUI.hpp"
+#include "Controller.h"
 #include "WindowSizeException.h"
 #include "Chunk.h"
 #include "Explorer.h"
 
 class Game {
 public:
-    Game(Explorer& explorer);
-    void run(Explorer& explorer);
+    Game(Explorer& explorer, Controller& controller);
+    void run(Explorer& explorer, Controller& controller);
 
-    void receiveGrid(Explorer& explorer);
-    void sendEventToBackend(const std::string& event, const std::string& player, const std::string& direction);
+    //void receiveGrid(Explorer& explorer);
+    void sendEventToBackend(char direction, Explorer& explorer, Controller& controller);
+    //const std::string& event, const std::string& player, const std::string& direction)
 
     bool startedOnce = false;
 private:
-    void processEvents();
+    void processEvents(Explorer& explorer,  Controller& controller);
     void update(Explorer& explorer);
     void render(Explorer& explorer);
-    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed, Explorer& explorer, Controller& controller);
     void checkPowerCollision(sf::Sprite& player);
 
 private:
@@ -33,6 +35,11 @@ private:
 
     Cell cell[MAZE_WIDTH][MAZE_HEIGHT]; //create all cell objects
 
+
+    sf::Texture player_1_wins_texture;
+    sf::Sprite player_1_wins_sprite;
+    sf::Texture player_2_wins_texture;
+    sf::Sprite player_2_wins_sprite;
     sf::Texture playerTexture;
     sf::Sprite player1;
     sf::Sprite player2;

@@ -329,16 +329,16 @@ void Catacomb:: random_warps_and_powers(){
             int warp = d8(gen);
             int axisX = coordenatesX(gen);
             int axisY = coordenatesY(gen);
-            if((warp == 1 /*|| warp == 2*/) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
+            if((warp == 1) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setNorth(layout[axisX][axisY]);
                 layout[room][floor]->setContain('^');
-            } else if((warp == 3 || warp == 4) && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
+            } else if((warp == 4) && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setSouth(layout[axisX][axisY]);
                 layout[room][floor]->setContain('v');
-            } else if((warp == 5/* || warp == 6*/) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
+            } else if((warp == 5) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setEast(layout[axisX][axisY]);
                 layout[room][floor]->setContain('>');
-            } else if((warp == 7 || warp == 8) && layout[room][floor]->getWest() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
+            } else if((warp == 8) && layout[room][floor]->getWest() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setWest(layout[axisX][axisY]);
                 layout[room][floor]->setContain('<');
             }
