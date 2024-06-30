@@ -1,4 +1,3 @@
-// menu.cpp
 #include "MenuUI.hpp"
 
 Menu::Menu(sf::RenderWindow &window) : window(window) {
@@ -24,23 +23,28 @@ Menu::Menu(sf::RenderWindow &window) : window(window) {
 }
 
 bool Menu::loadTextures() {
-    if (!backgroundTexture.loadFromFile("../assets/menu1.jpeg") ||
-        !startButtonTexture.loadFromFile("../assets/startButt.png") ||
-        !exitButtonTexture.loadFromFile("../assets/exitButt.png") ||
-        !openedTexture.loadFromFile("../assets/todoAbierto.jpeg")) {
+    if (!backgroundTexture.loadFromFile("./assets/menu1.jpeg") ||
+        !startButtonTexture.loadFromFile("./assets/startButt.png") ||
+        !exitButtonTexture.loadFromFile("./assets/exitButt.png")) {
         return false; //exception
     }
     return true;
 }
 
-void Menu::run(bool open) {
-    while (open) {
-        handleEvents(open);
+void Menu::run() {
+    
+    //Game initGame;
+
+    while(window.isOpen()){
+        handleEvents();
         render();
     }
+    
+
 }
 
-void Menu::handleEvents(bool open) {
+void Menu::handleEvents() {
+
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -51,11 +55,15 @@ void Menu::handleEvents(bool open) {
             if (event.mouseButton.button == sf::Mouse::Left) {
                 if (isSpriteClicked(startButtonSprite)) {
                     std::cout << "Sprite 1 clickeado!" << std::endl;
-                    window.clear();
-                    open=false;
+
+                    window.close();
+                    //game.run();
+                    
                 }
                 if (isSpriteClicked(exitButtonSprite)) {
                     std::cout << "Sprite 2 clickeado!" << std::endl;
+                    window.close();
+
                 }
             }
         }

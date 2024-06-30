@@ -5,10 +5,15 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "Game.h"
+#include "Config.h"
+#include "WindowSizeException.h"
+
 class Menu {
 public:
     Menu(sf::RenderWindow &window);
-    void run(bool open);
+    void run( );
+    Game game;
 
 private:
     sf::RenderWindow &window;
@@ -22,7 +27,7 @@ private:
     sf::Texture openedTexture;
 
     bool loadTextures();
-    void handleEvents(bool open);
+    void handleEvents( );
     void render();
     bool isSpriteClicked(sf::Sprite sprite);
     //bool state;

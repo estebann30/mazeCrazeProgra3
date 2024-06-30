@@ -3,12 +3,10 @@
 #include "WindowSizeException.h"
 #include "MenuUI.hpp"
 
-bool startGame =true;
-
 int main() {
     try {
         Game game;
-        Menu menu;
+        //Menu menu();
         std::vector<std::vector<Node>> initialGrid(MAZE_WIDTH, std::vector<Node>(MAZE_HEIGHT));
         initialGrid[2][2].hasPower1 = true;
         initialGrid[3][3].hasPower2 = true;
@@ -19,9 +17,8 @@ int main() {
         initialGrid[0][2].treasure1 = true;
         game.receiveGrid(initialGrid);
 
-        if(startGame==false){
-            game.run();
-        }
+        game.run();
+        
         
     } catch (const WindowSizeException& e){
         std::cerr << "Error: " << e.what() << std::endl;

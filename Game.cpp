@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "CellUI.hpp"
 
 Game::Game()
     : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MazeCraze"),
@@ -102,6 +101,7 @@ Game::Game()
 void Game::run() {
 
     while (window.isOpen()) {
+        
         processEvents();
         update();
         render();

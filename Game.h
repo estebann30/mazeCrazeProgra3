@@ -8,6 +8,7 @@
 #include "Grid.h"
 #include "Config.h"
 #include "CellUI.hpp"
+#include "MenuUI.hpp"
 #include "WindowSizeException.h"
 
 class Game {
