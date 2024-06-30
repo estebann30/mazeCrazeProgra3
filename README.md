@@ -34,10 +34,11 @@ La interfaz gráfica fue hecha en SFML
 Tener SFML instalado
 Tener C++ y su compilador instalados
 Tener CMake instalado
-Clonar el repositorio: 
+Clonar el repositorio: https://github.com/estebann30/mazeCrazeProgra3.git
 
 # Cómo correr el programa
 
+Abrir la carpeta principal del repositorio y en la terminal escribir make, y luego de que compile escribir ./game
 
 
 
