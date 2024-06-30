@@ -1,9 +1,6 @@
-#include "Game.h"
-#include "Config.h"
-#include "WindowSizeException.h"
-#include "MenuUI.hpp"
+#include "UI_initializer.h"
 
-int main() {
+void UI_initializer::initialize() {
     try {
         Game game;
         //Menu menu();
@@ -25,5 +22,4 @@ int main() {
     }catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
-    return 0;
 }
