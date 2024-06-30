@@ -3,11 +3,11 @@ CXX = g++
 CXXFLAGS = -Wall -g
 
 # Definimos los archivos de origen y los archivos objeto
-SRCS = Catacomb.cpp CellUI.cpp Chunk.cpp Controller.cpp Explorer.cpp Game.cpp main.cpp WindowSizeException.cpp
+SRCS = src/Catacomb.cpp src/CellUI.cpp src/Chunk.cpp src/Controller.cpp src/Explorer.cpp src/Game.cpp src/main.cpp src/WindowSizeException.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # Definimos el nombre del ejecutable
-EXEC = laberinto_test
+EXEC = game
 
 # Definimos las librerías de SFML
 SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system

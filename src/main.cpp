@@ -25,21 +25,12 @@ int main(){
 
     explorer.dungeon().tunneler(); //le añade portales, poderes, conexiones (tambien quita conexiones)
 
-    explorer.thombRaider(); //
+    //explorer.thombRaider(); //visualizar en terminal
 
 
     try {
         Game game(explorer);
         //Menu menu();
-        // std::vector<std::vector<Node>> initialGrid(MAZE_WIDTH, std::vector<Node>(MAZE_HEIGHT));
-        // initialGrid[2][2].hasPower1 = true;
-        // initialGrid[3][3].hasPower2 = true;
-        // initialGrid[4][3].hasPower3 = true;
-        // initialGrid[1][1].hasPower4 = true; 
-        // initialGrid[0][0].hasPlayer1 = true; 
-        // initialGrid[0][1].hasPlayer2 = true; 
-        // initialGrid[0][2].treasure1 = true;
-        //game.receiveGrid(explorer);
 
         game.run(explorer);
         

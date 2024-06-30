@@ -133,10 +133,6 @@ void Game::update(Explorer& explorer) {
 void Game::render(Explorer& explorer) {
     auto& zone = explorer.dungeon().mapped();
 
-    // if(startedOnce == false){
-    //     explorer.thombRaider();
-    // }
-
     window.clear();
 
     window.draw(spriteFondo);
@@ -148,60 +144,11 @@ void Game::render(Explorer& explorer) {
             cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
             
             
-
-            //cell[x][y].draw(window);
-            
             if(zone[y][x] != nullptr){
                 
                 cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
-                cell[x][y].draw(window);
-
-                if (zone[y][x]->getNorth() == nullptr) {
-                    cell[x][y].drawNorth(window);
-                }
-                if (zone[y][x]->getEast() == nullptr) {
-                    cell[x][y].drawEast(window);
-                }
-                if (zone[y][x]->getWest() == nullptr) {
-                    cell[x][y].drawWest(window);
-                }
-                if (zone[y][x]->getSouth() == nullptr) {
-                    cell[x][y].drawSouth(window);
-                }
-
-
+                cell[x][y].draw(window, explorer, x, y);
             }
-
-            // if (zone[x][y]->getNorth() == nullptr) {
-            //     cell[x][y].drawNorth(window);
-            // }
-            // if (zone[x][y]->getEast() == nullptr) {
-            //     cell[x][y].drawEast(window);
-            // }
-            // if (zone[x][y]->getWest() == nullptr) {
-            //     cell[x][y].drawWest(window);
-            // }
-            // if (zone[x][y]->getSouth() == nullptr) {
-            //     cell[x][y].drawSouth(window);
-            // }
-
-            // bool norte = true;
-            // bool sur = true;
-            // bool este = true;
-            // bool oeste = true;
-
-            // if (norte) {
-            //     cell[x][y].drawNorth(window);
-            // }
-            // if (este) {
-            //     cell[x][y].drawEast(window);
-            // }
-            // if (oeste) {
-            //     cell[x][y].drawWest(window);
-            // }
-            // if (sur) {
-            //     cell[x][y].drawSouth(window);
-            // }
 
 
             if (zone[y][x]->getContain()=='@') {
@@ -272,11 +219,7 @@ void Game::render(Explorer& explorer) {
                         offsetY + explorer.getY(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().height) / 2.0f));
         window.draw(player2);
 
-    // for (int x = 0; x < totalSpritesX; ++x) {
-    //     for (int y = 0; y < totalSpritesY; ++y) {
-            
-    //     }
-    // }
+    
     window.draw(player1JumpText);
     window.draw(player2JumpText);
     window.draw(turnText);

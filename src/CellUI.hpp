@@ -4,15 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Config.h"
+#include "Explorer.h"
 
 class Cell {
 public:
     Cell();
-    void draw(sf::RenderWindow& window);
-    void drawNorth(sf::RenderWindow& window);
-    void drawEast(sf::RenderWindow& window);
-    void drawSouth(sf::RenderWindow& window);
-    void drawWest(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window,Explorer& explorer, int x, int y);
 
     sf::Sprite cellSprite; //floor
 

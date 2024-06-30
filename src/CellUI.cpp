@@ -57,56 +57,23 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
 }
 
 
-void Cell::draw(sf::RenderWindow& window) { 
-    
+void Cell::draw(sf::RenderWindow& window, Explorer& explorer, int x, int y) { 
+
+    auto& zone = explorer.dungeon().mapped();
+    sf::Vector2u textureSize = cellTexture.getSize();
+    adjustWallSprites(textureSize);
     window.draw(cellSprite);
 
-    // if (zone[x][y]->getNorth() == nullptr) {
-    //     window.draw(upperWallSprite);
-    // }
-    // if (zone[x][y]->getEast() == nullptr) {
-    //     window.draw(rightWallSprite);
-    // }
-    // if (zone[x][y]->getWest() == nullptr) {
-    //     window.draw(leftWallSprite);
-    // }
-    // if (zone[x][y]->getSouth() == nullptr) {
-    //     window.draw(belowWallSprite);
-    // }
-}
-
-void Cell::drawNorth(sf::RenderWindow& window){
-
-    sf::Vector2u textureSize = cellTexture.getSize();
-    adjustWallSprites(textureSize);
-
-    window.draw(upperWallSprite);
-
-}
-
-void Cell::drawEast(sf::RenderWindow& window){
-
-    sf::Vector2u textureSize = cellTexture.getSize();
-    adjustWallSprites(textureSize);
-
-    window.draw(rightWallSprite);
-
-}
-
-void Cell::drawSouth(sf::RenderWindow& window){
-
-    sf::Vector2u textureSize = cellTexture.getSize();
-    adjustWallSprites(textureSize);
-
-    window.draw(belowWallSprite);
-
-}
-
-void Cell::drawWest(sf::RenderWindow& window){
-    
-    sf::Vector2u textureSize = cellTexture.getSize();
-    adjustWallSprites(textureSize);
-
-    window.draw(leftWallSprite);
-
+    if (zone[y][x]->getNorth() == nullptr) {
+        window.draw(upperWallSprite);
+    }
+    if (zone[y][x]->getEast() == nullptr) {
+        window.draw(rightWallSprite);
+    }
+    if (zone[y][x]->getWest() == nullptr) {
+        window.draw(leftWallSprite);
+    }
+    if (zone[y][x]->getSouth() == nullptr) {
+        window.draw(belowWallSprite);
+    }
 }
