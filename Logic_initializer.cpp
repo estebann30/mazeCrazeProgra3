@@ -5,7 +5,7 @@ using namespace std;
 
 void Logic_initializer::initialize() {
 
-    Explorer explorer;
+    //Explorer explorer;
     Controller control;
 
 

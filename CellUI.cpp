@@ -65,8 +65,8 @@ void Cell::adjustWallSprites(const sf::Vector2u &textureSize) {
 }
 
 
-void Cell::draw(sf::RenderWindow& window, bool upper, bool right, bool left, bool below) { 
-
+void Cell::draw(sf::RenderWindow& window, Explorer& explorer, int x, int y) { 
+    auto& zone = explorer.dungeon().mapped();
     sf::Vector2u textureSize = cellTexture.getSize();
     adjustWallSprites(textureSize);
     
@@ -74,16 +74,16 @@ void Cell::draw(sf::RenderWindow& window, bool upper, bool right, bool left, boo
 
     adjustWallSprites(textureSize);
 
-    if (upper) {
+    if (zone[x][y]->getNorth() == nullptr) {
         window.draw(upperWallSprite);
     }
-    if (right) {
+    if (zone[x][y]->getEast() == nullptr) {
         window.draw(rightWallSprite);
     }
-    if (left) {
+    if (zone[x][y]->getWest() == nullptr) {
         window.draw(leftWallSprite);
     }
-    if (below) {
+    if (zone[x][y]->getSouth() == nullptr) {
         window.draw(belowWallSprite);
     }
 

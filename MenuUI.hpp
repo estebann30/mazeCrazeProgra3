@@ -13,7 +13,7 @@ class Menu {
 public:
     Menu(sf::RenderWindow &window);
     void run( );
-    Game game;
+    //Game game;
 
 private:
     sf::RenderWindow &window;

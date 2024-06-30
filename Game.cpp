@@ -1,8 +1,8 @@
 #include "Game.h"
 
-Game::Game()
+Game::Game(Explorer& explorer)
     : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MazeCraze"),
-      grid(MAZE_WIDTH, MAZE_HEIGHT), turnPlayer(true){
+      turnPlayer(true){
     
     totalWidth = MAZE_WIDTH * CELL_SIZE;
     totalHeight = MAZE_HEIGHT * CELL_SIZE;
@@ -98,13 +98,13 @@ Game::Game()
     turnText.setPosition(WINDOW_WIDTH - 180, 10);
 }
 
-void Game::run() {
+void Game::run(Explorer& explorer) {
 
     while (window.isOpen()) {
         
         processEvents();
-        update();
-        render();
+        update(explorer);
+        render(explorer);
     }
 }
 
@@ -122,17 +122,17 @@ void Game::processEvents() {
     }
 }
 
-void Game::update() {
-    checkPowerCollision(player1);
-    checkPowerCollision(player2);
-    player1JumpCount=0;
-    player2JumpCount=0;
-    player1JumpText.setString("Player 1 Jumps: " + std::to_string(player1JumpCount));
-    player2JumpText.setString("Player 2 Jumps: " + std::to_string(player2JumpCount));
-    turnText.setString(("Player # Turn"));
+void Game::update(Explorer& explorer) {
+    // checkPowerCollision(player1);
+    // checkPowerCollision(player2);
+    player1JumpText.setString("Player 1 Jumps: " + std::to_string(explorer.getJumps(1)));
+    player2JumpText.setString("Player 2 Jumps: " + std::to_string(explorer.getJumps(2)));
+    turnText.setString(("Player "+std::to_string(explorer.getPlayer())+ " Turn"));
 }
 
-void Game::render() {
+void Game::render(Explorer& explorer) {
+    auto& zone = explorer.dungeon().mapped();
+
     window.clear();
 
     window.draw(spriteFondo);
@@ -143,38 +143,60 @@ void Game::render() {
             if(startedOnce == false){
                 cell[x][y].cellSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE, offsetY + y * CELL_SIZE));
             }
-            cell[x][y].draw(window,true,true,true,true);
+            
 
-            Node& node = grid.getNode(x, y);
-            if (node.hasPower1) {
+            cell[x][y].draw(window, explorer, x, y);
+
+            if (zone[x][y]->getContain()=='@') {
                 sf::Sprite powerSprite(powerTexture1);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture1.getSize().x, 0.6f * CELL_SIZE / powerTexture1.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (node.hasPower2) {
-                sf::Sprite powerSprite(powerTexture2);
-                powerSprite.setScale(0.6f * CELL_SIZE / powerTexture2.getSize().x, 0.6f * CELL_SIZE / powerTexture2.getSize().y);
-                powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
-                                                     offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
-                window.draw(powerSprite);
-            }
-            if (node.hasPower3) {
+             if (zone[x][y]->getContain()=='%') {
+                 sf::Sprite powerSprite(powerTexture2);
+                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture2.getSize().x, 0.6f * CELL_SIZE / powerTexture2.getSize().y);
+                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
+                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
+                 window.draw(powerSprite);
+             }
+            if (zone[x][y]->getContain()=='<') {
                 sf::Sprite powerSprite(powerTexture3);
                 powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (node.hasPower4) {
-                sf::Sprite powerSprite(powerTexture4);
-                powerSprite.setScale(0.6f * CELL_SIZE / powerTexture4.getSize().x, 0.6f * CELL_SIZE / powerTexture4.getSize().y);
+            if (zone[x][y]->getContain()=='>') {
+                sf::Sprite powerSprite(powerTexture3);
+                powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
                                                      offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
                 window.draw(powerSprite);
             }
-            if (node.treasure1) {
+            if (zone[x][y]->getContain()=='v') {
+                sf::Sprite powerSprite(powerTexture3);
+                powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
+                powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
+                                                     offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
+                window.draw(powerSprite);
+            }
+            if (zone[x][y]->getContain()=='^') {
+                sf::Sprite powerSprite(powerTexture3);
+                powerSprite.setScale(0.6f * CELL_SIZE / powerTexture3.getSize().x, 0.6f * CELL_SIZE / powerTexture3.getSize().y);
+                powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
+                                                     offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
+                window.draw(powerSprite);
+            }
+            if (zone[x][y]->getContain()=='&') {
+                sf::Sprite powerSprite(powerTexture4);
+                powerSprite.setScale(0.6f* CELL_SIZE / powerTexture4.getSize().x, 0.6f * CELL_SIZE / powerTexture4.getSize().y);
+                powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
+                                                     offsetY + y * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().height) / 2.0f));
+                window.draw(powerSprite);
+            }
+            if (zone[x][y]->getContain()=='$') {
                 sf::Sprite powerSprite(treasureTexture);
                 powerSprite.setScale(0.3f * CELL_SIZE / treasureTexture.getSize().x, 0.3f * CELL_SIZE / treasureTexture.getSize().y);
                 powerSprite.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - powerSprite.getGlobalBounds().width) / 2.0f,
@@ -186,21 +208,18 @@ void Game::render() {
 
     startedOnce = true;
 
-    for (int x = 0; x < totalSpritesX; ++x) {
-        for (int y = 0; y < totalSpritesY; ++y) {
-            Node& node = grid.getNode(x, y);
-            if (node.hasPlayer1) {
-                player1.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().width) / 2.0f,
-                                    offsetY + y * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().height) / 2.0f));
-                window.draw(player1);
-            }
-            if (node.hasPlayer2) {
-                player2.setPosition(sf::Vector2f(offsetX + x * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().width) / 2.0f,
-                                    offsetY + y * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().height) / 2.0f));
-                window.draw(player2);
-            }
-        }
-    }
+    player1.setPosition(sf::Vector2f(offsetX + explorer.getX(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().width) / 2.0f,
+                            offsetY + explorer.getY(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().height) / 2.0f));
+        window.draw(player1);
+    player2.setPosition(sf::Vector2f(offsetX + explorer.getX(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().width) / 2.0f,
+                        offsetY + explorer.getY(2) * CELL_SIZE + (CELL_SIZE - player2.getGlobalBounds().height) / 2.0f));
+        window.draw(player2);
+
+    // for (int x = 0; x < totalSpritesX; ++x) {
+    //     for (int y = 0; y < totalSpritesY; ++y) {
+            
+    //     }
+    // }
     window.draw(player1JumpText);
     window.draw(player2JumpText);
     window.draw(turnText);
@@ -232,34 +251,35 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
 }
 
 
-void Game::checkPowerCollision(sf::Sprite& player) {
-    sf::Vector2f playerPosition = player.getPosition();
-    int x = (playerPosition.x - offsetX) / CELL_SIZE;
-    int y = (playerPosition.y - offsetY) / CELL_SIZE;
-    if (x >= 0 && x < totalSpritesX && y >= 0 && y < totalSpritesY) {
-        Node& node = grid.getNode(x, y);
-        if (node.hasPower1) {
-            node.hasPower1 = false;
-        }
-        if (node.hasPower2) {
-            node.hasPower2 = false;
-        }
-        if (node.hasPower3) {
-            node.hasPower3 = false;
-        }
-        if (node.hasPower4) {
-            node.hasPower4 = false;
-        }
-    }
-}
+// void Game::checkPowerCollision(sf::Sprite& player) {
+//     sf::Vector2f playerPosition = player.getPosition();
+//     int x = (playerPosition.x - offsetX) / CELL_SIZE;
+//     int y = (playerPosition.y - offsetY) / CELL_SIZE;
+//     if (x >= 0 && x < totalSpritesX && y >= 0 && y < totalSpritesY) {
+//         Node& node = grid.getNode(x, y);
+//         if (node.hasPower1) {
+//             node.hasPower1 = false;
+//         }
+//         if (node.hasPower2) {
+//             node.hasPower2 = false;
+//         }
+//         if (node.hasPower3) {
+//             node.hasPower3 = false;
+//         }
+//         if (node.hasPower4) {
+//             node.hasPower4 = false;
+//         }
+//     }
+// }
 
-void Game::receiveGrid(const std::vector<std::vector<Node>>& newGrid) {
-    for (int x = 0; x < grid.getWidth(); ++x) {
-        for (int y = 0; y < grid.getHeight(); ++y) {
-            grid.setNode(x, y, newGrid[x][y]);
-        }
-    }
-}
+// void Game::receiveGrid(Explorer& explorer) {
+//     auto& zone= explorer.dungeon().mapped();
+//     for (int x = 0; x < MAZE_WIDTH; ++x) {
+//         for (int y = 0; y < MAZE_HEIGHT; ++y) {
+//             grid.setNode(x, y, zone[x][y]);
+//         }
+//     }
+// }
 
 void Game::sendEventToBackend(const std::string& event, const std::string& player, const std::string& direction) {
     std::cout << "Evento enviado al backend: " << event << " Jugador: " << player << " Dirección: " << direction << std::endl;

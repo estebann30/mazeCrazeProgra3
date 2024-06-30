@@ -115,6 +115,16 @@ void Controller:: pad(Explorer& explorer) {
             pad(explorer);
         }
         //pad(explorer);
+        
         return;
+    }
+    if(explorer.getDoublePlay(explorer.getPlayer()) == 1){
+        if(explorer.getPlayer() == 1){
+            explorer.deductDoublePlay(1);
+            pad(explorer);
+        }else{
+            explorer.deductDoublePlay(2);
+            pad(explorer);
+        }
     }
 }

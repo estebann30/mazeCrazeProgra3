@@ -22,6 +22,7 @@ class Explorer {
     //[2][1] = JUGADOR 2 POSICION EN Y
     //[1][2] = JUGADOR 1 MOVIMIENTOS DEL PERSONAJE (si tiene 1 es solo él, si tiene 2 es para el rival)
     //[1][3] = JUGADOR 1 SALTOS DISPONIBLES
+    //[1][4] = JUGAR DOBLE
 
     Catacomb maze;
 
@@ -55,6 +56,10 @@ class Explorer {
 
     void setMindFlay(int p, int status);
 
+    void addDoublePlay(int p);
+
+    void deductDoublePlay(int p);
+
     void addJumps(int p);
 
     void deductJumps(int p);
@@ -68,6 +73,8 @@ class Explorer {
     int getY(int p) const;
 
     int getMindFlay(int p) const;
+
+    int getDoublePlay(int p) const;
 
     int getJumps(int p) const;
 

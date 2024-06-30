@@ -4,11 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Config.h"
+#include "Explorer.h"
 
 class Cell {
 public:
     Cell();
-    void draw(sf::RenderWindow& window, bool upper, bool right, bool left, bool below);
+    void draw(sf::RenderWindow& window, Explorer& explorer, int x, int y);
     sf::Sprite cellSprite; //background
 
 private:

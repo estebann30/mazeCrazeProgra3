@@ -5,25 +5,27 @@
 #include <iostream>
 #include <vector>
 #include "Node.h"
-#include "Grid.h"
+//#include "Grid.h"
 #include "Config.h"
 #include "CellUI.hpp"
-#include "MenuUI.hpp"
+//#include "MenuUI.hpp"
 #include "WindowSizeException.h"
+#include "Chunk.h"
+#include "Explorer.h"
 
 class Game {
 public:
-    Game();
-    void run();
+    Game(Explorer& explorer);
+    void run(Explorer& explorer);
 
-    void receiveGrid(const std::vector<std::vector<Node>>& newGrid);
+    void receiveGrid(Explorer& explorer);
     void sendEventToBackend(const std::string& event, const std::string& player, const std::string& direction);
 
     bool startedOnce = false;
 private:
     void processEvents();
-    void update();
-    void render();
+    void update(Explorer& explorer);
+    void render(Explorer& explorer);
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
     void checkPowerCollision(sf::Sprite& player);
 
@@ -48,7 +50,7 @@ private:
     int totalSpritesY;
     float offsetX;
     float offsetY;
-    Grid grid;
+    //Grid grid;
     sf::Texture fondoTexture;
     sf::Sprite spriteFondo;
     sf::Font font;

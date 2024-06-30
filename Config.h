@@ -7,7 +7,7 @@
 
 #define WINDOW_HEIGHT 600
 
-#define MAZE_WIDTH 12
+#define MAZE_WIDTH 7
 
 #define MAZE_HEIGHT 7
 

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Explorer::Explorer() : players(2, vector<int>(4, 0)), player(1), winner(0) {}
+Explorer::Explorer() : players(2, vector<int>(5, 0)), player(1), winner(0) {}
 
 //[1][0] = JUGADOR 1 POSICION EN X
 //[2][1] = JUGADOR 2 POSICION EN Y
@@ -44,6 +44,9 @@ void Explorer:: moveN(int p){
         } else if(zone[x][y]->getContain() == '^') {
             zone[x][y]->setNorth(nullptr);
             zone[x][y]->setContain('#');
+        }else if(zone[x][y]->getNorth()->getContain() == '%'){
+            addDoublePlay(getPlayer());
+            zone[x][y]->getNorth()->setContain('#');
         }
         
         if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
@@ -85,7 +88,10 @@ void Explorer:: moveS(int p){
         } else if(zone[x][y]->getContain() == 'v') {
             zone[x][y]->setSouth(nullptr);
             zone[x][y]->setContain('#');
-        } 
+        } else if(zone[x][y]->getSouth()->getContain() == '%'){
+            addDoublePlay(getPlayer());
+            zone[x][y]->getSouth()->setContain('#');
+        }
 
         if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
             changePlayer();
@@ -128,7 +134,10 @@ void Explorer:: moveE(int p){
         } else if(zone[x][y]->getContain() == '>') {
             zone[x][y]->setEast(nullptr);
             zone[x][y]->setContain('#');
-        } 
+        } else if(zone[x][y]->getEast()->getContain() == '%'){
+            addDoublePlay(getPlayer());
+            zone[x][y]->getEast()->setContain('#');
+        }
 
         if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
             changePlayer();
@@ -170,7 +179,10 @@ void Explorer:: moveW(int p){
         } else if(zone[x][y]->getContain() == '<') {
             zone[x][y]->setWest(nullptr);
             zone[x][y]->setContain('#');
-        } 
+        } else if(zone[x][y]->getWest()->getContain() == '%'){
+            addDoublePlay(getPlayer());
+            zone[x][y]->getWest()->setContain('#');
+        }
 
         if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
             changePlayer();
@@ -243,6 +255,14 @@ void Explorer:: setMindFlay(int p, int status){
     players[p - 1][2] = status;
 }
 
+void Explorer:: addDoublePlay(int p){
+    players[p - 1][4]++;
+}
+
+void Explorer:: deductDoublePlay(int p){
+    players[p - 1][4]--;
+}
+
 void Explorer:: addJumps(int p){
     players[p - 1][3]++;
 }
@@ -269,6 +289,10 @@ int Explorer::getY(int p) const {
 
 int Explorer::getMindFlay(int p) const {
     return players[p - 1][2];
+}
+
+int Explorer:: getDoublePlay(int p) const{
+    return players[p - 1][4];
 }
 
 int Explorer::getJumps(int p) const {

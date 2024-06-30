@@ -18,8 +18,8 @@ void Catacomb:: mazeMapping() {
 
     while(checking) {
         layout = vector<vector<Chunk*>>(rooms, vector<Chunk*>(floors, nullptr));
-        //DFS(0, 0, rooms -1, floors -1, rooms, floors);
-        BFS(0, 0, rooms -1, floors -1, rooms, floors);
+        DFS(0, 0, rooms -1, floors -1, rooms, floors);
+        //BFS(0, 0, rooms -1, floors -1, rooms, floors);
     }
 }
 
@@ -329,13 +329,13 @@ void Catacomb:: random_warps_and_powers(){
             int warp = d8(gen);
             int axisX = coordenatesX(gen);
             int axisY = coordenatesY(gen);
-            if((warp == 1 || warp == 2) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
+            if((warp == 1 /*|| warp == 2*/) && layout[room][floor]->getNorth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setNorth(layout[axisX][axisY]);
                 layout[room][floor]->setContain('^');
             } else if((warp == 3 || warp == 4) && layout[room][floor]->getSouth() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setSouth(layout[axisX][axisY]);
                 layout[room][floor]->setContain('v');
-            } else if((warp == 5 || warp == 6) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
+            } else if((warp == 5/* || warp == 6*/) && layout[room][floor]->getEast() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
                 layout[room][floor]->setEast(layout[axisX][axisY]);
                 layout[room][floor]->setContain('>');
             } else if((warp == 7 || warp == 8) && layout[room][floor]->getWest() == nullptr && layout[room][floor]->getContain() != '$' && layout[axisX][axisY]) {
@@ -352,6 +352,9 @@ void Catacomb:: random_warps_and_powers(){
                 } else if(power == 2){
                     //double jump
                     layout[room][floor]->setContain('&');
+                }else if(power == 3){
+                    //double play
+                    layout[room][floor]->setContain('%');
                 }
             }
         }
@@ -374,10 +377,10 @@ void Catacomb:: tunneler(){
     }
 
     //connect at least 1 isolated chunk (DFS)
-    //connect_random_nodes();
+    connect_random_nodes();
 
     //disconnect at least 1 chunk (BFS)
-    disconnect_random_nodes();
+    //disconnect_random_nodes();
 
     //random portals and powers
     random_warps_and_powers();     

@@ -7,7 +7,8 @@
 using namespace std;
 
 class Logic_initializer{
-
+    public:
+    Explorer explorer;
     private:
         Logic_initializer();
         void initialize();
