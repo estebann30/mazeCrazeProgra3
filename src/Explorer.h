@@ -70,6 +70,8 @@ class Explorer {
 
     int getPlayer() const;
 
+    int getRival();
+
     int getX(int p) const;
 
     int getY(int p) const;
