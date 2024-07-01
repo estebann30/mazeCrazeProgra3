@@ -16,18 +16,13 @@ class Game {
 public:
     Game(Explorer& explorer, Controller& controller);
     void run(Explorer& explorer, Controller& controller);
-
-    //void receiveGrid(Explorer& explorer);
     void sendEventToBackend(char direction, Explorer& explorer, Controller& controller);
-    //const std::string& event, const std::string& player, const std::string& direction)
 
-    bool startedOnce = false;
 private:
     void processEvents(Explorer& explorer,  Controller& controller);
     void update(Explorer& explorer);
     void render(Explorer& explorer);
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed, Explorer& explorer, Controller& controller);
-    void checkPowerCollision(sf::Sprite& player);
 
 private:
     sf::RenderWindow window;

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Chunk.h"
+#include "Config.h"
 
 using namespace std;
 

@@ -17,13 +17,6 @@ class Explorer {
     int player;
 
     int winner;
-
-    //[1][0] = JUGADOR 1 POSICION EN X
-    //[2][1] = JUGADOR 2 POSICION EN Y
-    //[1][2] = JUGADOR 1 MOVIMIENTOS DEL PERSONAJE (si tiene 1 es solo él, si tiene 2 es para el rival)
-    //[1][3] = JUGADOR 1 SALTOS DISPONIBLES
-    //[1][4] = JUGAR DOBLE
-
     Catacomb maze;
 
     public:

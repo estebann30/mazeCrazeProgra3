@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -g
 
 # Definimos los archivos de origen y los archivos objeto
-SRCS = src/Catacomb.cpp src/CellUI.cpp src/Chunk.cpp src/Controller.cpp src/Explorer.cpp src/Game.cpp src/main.cpp src/WindowSizeException.cpp
+SRCS = src/Catacomb.cpp src/CellUI.cpp src/Chunk.cpp src/Controller.cpp src/Explorer.cpp src/Game.cpp src/main.cpp src/WindowSizeException.cpp src/MenuUI.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # Definimos el nombre del ejecutable

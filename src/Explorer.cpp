@@ -5,11 +5,6 @@ using namespace std;
 
 Explorer::Explorer() : players(2, vector<int>(5, 0)), player(1), winner(0) {}
 
-//[1][0] = JUGADOR 1 POSICION EN X
-//[2][1] = JUGADOR 2 POSICION EN Y
-//[1][2] = JUGADOR 1 MOVIMIENTOS DEL PERSONAJE (si tiene 1 es solo él, si tiene 2 es para el rival)
-//[1][3] = JUGADOR 1 SALTOS DISPONIBLES
-
 Catacomb& Explorer:: dungeon() {
     return maze;
 }
@@ -32,9 +27,7 @@ void Explorer:: moveN(int p){
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
-    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    //cout << endl << "y actual: " << y << endl;
 
     if(zone[x][y] && zone[x][y]->getNorth()) {
         players[p - 1][0] = zone[x][y]->getNorth()->getRoom();
@@ -123,7 +116,6 @@ void Explorer:: moveN(int p){
 }
 
 void Explorer:: moveS(int p){
-    // players[p - 1][1]++; //sur
 
     if(getMindFlay(getPlayer()) != 0){
         deductMindFlay(getPlayer());
@@ -135,9 +127,7 @@ void Explorer:: moveS(int p){
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
-    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    //cout << endl << "y actual: " << y << endl;
 
     if(zone[x][y] && zone[x][y]->getSouth()) {
         players[p - 1][0] = zone[x][y]->getSouth()->getRoom();
@@ -225,7 +215,6 @@ void Explorer:: moveS(int p){
 }
 
 void Explorer:: moveE(int p){
-    // players[p - 1][0]++; //este
 
     if(getMindFlay(getPlayer()) != 0){
         deductMindFlay(getPlayer());
@@ -237,9 +226,7 @@ void Explorer:: moveE(int p){
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
-    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    //cout << endl << "y actual: " << y << endl;
     
     if(zone[x][y] && zone[x][y]->getEast()) {
         players[p - 1][0] = zone[x][y]->getEast()->getRoom();
@@ -327,7 +314,6 @@ void Explorer:: moveE(int p){
 }
 
 void Explorer:: moveW(int p){
-    // players[p - 1][0]--; //oeste
 
     if(getMindFlay(getPlayer()) != 0){
         deductMindFlay(getPlayer());
@@ -339,9 +325,7 @@ void Explorer:: moveW(int p){
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
-    //cout << endl << "x actual: " << x << endl;
     int y = players[p - 1][1];
-    //cout << endl << "y actual: " << y << endl;
 
     if(zone[x][y] && zone[x][y]->getWest()) {
         players[p - 1][0] = zone[x][y]->getWest()->getRoom();
@@ -543,52 +527,52 @@ int Explorer::getJumps(int p) const {
 
 
 //para visualizar en terminal
-void Explorer:: thombRaider() {
+// void Explorer:: thombRaider() {
 
-    auto& zone = dungeon().mapped();
+//     auto& zone = dungeon().mapped();
 
-    int row = zone.size() * 2 + 1;
-    int col = zone[0].size() * 2 + 1;
-    vector<vector<char>> thomb(row, vector<char>(col, ' '));
+//     int row = zone.size() * 2 + 1;
+//     int col = zone[0].size() * 2 + 1;
+//     vector<vector<char>> thomb(row, vector<char>(col, ' '));
 
-    for(int r = 0; r < zone.size(); ++r){
-        for(int c = 0; c < zone[0].size(); ++c){
-            int rr = r * 2 + 1;
-            int cc = c * 2 + 1;
+//     for(int r = 0; r < zone.size(); ++r){
+//         for(int c = 0; c < zone[0].size(); ++c){
+//             int rr = r * 2 + 1;
+//             int cc = c * 2 + 1;
 
-            if(zone[r][c] == nullptr){
-                thomb[rr][cc] = ' ';
-            } else {
-                thomb[rr][cc] = zone[r][c]->getContain();
+//             if(zone[r][c] == nullptr){
+//                 thomb[rr][cc] = ' ';
+//             } else {
+//                 thomb[rr][cc] = zone[r][c]->getContain();
 
-                if(zone[r][c]->getRoom() == getX(1) && zone[r][c]->getFloor() == getY(1) && zone[r][c] != nullptr) {
-                    thomb[rr][cc] = '1';
-                } else if(zone[r][c]->getRoom() == getX(2) && zone[r][c]->getFloor() == getY(2) && zone[r][c] != nullptr) {
-                    thomb[rr][cc] = '2';
-                }
+//                 if(zone[r][c]->getRoom() == getX(1) && zone[r][c]->getFloor() == getY(1) && zone[r][c] != nullptr) {
+//                     thomb[rr][cc] = '1';
+//                 } else if(zone[r][c]->getRoom() == getX(2) && zone[r][c]->getFloor() == getY(2) && zone[r][c] != nullptr) {
+//                     thomb[rr][cc] = '2';
+//                 }
 
-                if(zone[r][c] != nullptr) {
-                    if(zone[r][c]->getEast() != nullptr && zone[r][c]->getContain() != '>') {
-                        thomb[rr][cc + 1] = '-';
-                    }
-                    if(zone[r][c]->getSouth() != nullptr && zone[r][c]->getContain() != 'v') {
-                        thomb[rr + 1][cc] = '|';
-                    }
-                    if(zone[r][c]->getWest() != nullptr && zone[r][c]->getContain() != '<') {
-                        thomb[rr][cc - 1] = '-';
-                    }
-                    if(zone[r][c]->getNorth() != nullptr && zone[r][c]->getContain() != '^') {
-                        thomb[rr - 1][cc] = '|';
-                    }
-                }
-            }
-        }
-    }
+//                 if(zone[r][c] != nullptr) {
+//                     if(zone[r][c]->getEast() != nullptr && zone[r][c]->getContain() != '>') {
+//                         thomb[rr][cc + 1] = '-';
+//                     }
+//                     if(zone[r][c]->getSouth() != nullptr && zone[r][c]->getContain() != 'v') {
+//                         thomb[rr + 1][cc] = '|';
+//                     }
+//                     if(zone[r][c]->getWest() != nullptr && zone[r][c]->getContain() != '<') {
+//                         thomb[rr][cc - 1] = '-';
+//                     }
+//                     if(zone[r][c]->getNorth() != nullptr && zone[r][c]->getContain() != '^') {
+//                         thomb[rr - 1][cc] = '|';
+//                     }
+//                 }
+//             }
+//         }
+//     }
 
-    for (int r = 0; r < row; ++r) {
-        for (int c = 0; c < col; ++c) {
-            cout << thomb[r][c] << " ";
-        }
-        cout << endl;
-    }
-}
+//     for (int r = 0; r < row; ++r) {
+//         for (int c = 0; c < col; ++c) {
+//             cout << thomb[r][c] << " ";
+//         }
+//         cout << endl;
+//     }
+// }

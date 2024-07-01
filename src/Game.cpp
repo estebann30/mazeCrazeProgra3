@@ -274,8 +274,6 @@ void Game::render(Explorer& explorer) {
         }
     }
 
-    startedOnce = true;
-
     player1.setPosition(sf::Vector2f(offsetX + explorer.getY(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().width) / 2.0f,
                             offsetY + explorer.getX(1) * CELL_SIZE + (CELL_SIZE - player1.getGlobalBounds().height) / 2.0f));
         window.draw(player1);

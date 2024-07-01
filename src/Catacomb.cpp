@@ -11,8 +11,8 @@ using namespace std;
 Catacomb:: Catacomb() {}
 
 void Catacomb:: mazeMapping() {
-    int rooms = 7;
-    int floors = 7;
+    int rooms = MAZE_WIDTH;
+    int floors = MAZE_HEIGHT;
     
     checking = true;
 
@@ -53,9 +53,6 @@ void Catacomb::DFS(int p1x, int p1y, int p2x, int p2y, int rows, int cols) {
         layout[r][c]->setVisited(true);
 
         if(r == p2x && c == p2y) {
-            //cout << "destino r = " << r << endl;
-            //cout << "destino c = " << c << endl;
-
             //ubica el tesoro
             int step = path.size() % 2;
             int treasureChamber = path.size() / 2;

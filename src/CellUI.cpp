@@ -19,11 +19,11 @@ Cell::Cell() {
 
 bool Cell::loadTextures() {
 
-    if (!cellTexture.loadFromFile("./assets/suelo.jpg") || //background
-        !upperWallTexture.loadFromFile("./assets/cinta.jpg") ||  // ../assets/tapadoArribaa.jpeg
+    if (!cellTexture.loadFromFile("./assets/suelo.jpg") || 
+        !upperWallTexture.loadFromFile("./assets/cinta.jpg") ||  
         !leftWallTexture.loadFromFile("./assets/cintaVertical.jpg") ||        
         !rightWallTexture.loadFromFile("./assets/cintaVertical.jpg") ||
-        !belowWallTexture.loadFromFile("./assets/cinta.jpg")) {    // ../assets/tapadoAbajoo.jpeg
+        !belowWallTexture.loadFromFile("./assets/cinta.jpg")) {
         return false; //exception
     }
     return true;

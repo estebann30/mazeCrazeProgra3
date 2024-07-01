@@ -27,12 +27,19 @@ int main(){
 
     //explorer.thombRaider(); //visualizar en terminal
 
-
     try {
-        Game game(explorer, control);
-        //Menu menu();
+        
+        sf::RenderWindow window(sf::VideoMode(800, 600), "Menu");
+        Menu menu(window);
+        menu.run();
 
-        game.run(explorer, control);
+        bool status = menu.get_status();
+
+        if(status){
+            Game game(explorer, control);
+            game.run(explorer, control);
+        }
+
         
     } catch (const WindowSizeException& e){
         std::cerr << "Error: " << e.what() << std::endl;
@@ -40,8 +47,5 @@ int main(){
         std::cerr << e.what() << std::endl;
     }
     
-
-    
-
     return 0;
 }

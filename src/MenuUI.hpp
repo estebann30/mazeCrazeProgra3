@@ -3,19 +3,26 @@
 #define MENUUI_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
-#include "Game.h"
 #include "Config.h"
+#include "Game.h"
 #include "WindowSizeException.h"
 
 class Menu {
 public:
     Menu(sf::RenderWindow &window);
     void run( );
-    //Game game;
+    bool get_status();
+
+    bool status;
 
 private:
+
+    sf::SoundBuffer menuMusicBuffer;
+    sf::Sound menuMusicSound;
+
     sf::RenderWindow &window;
     sf::Sprite backgroundSprite;
     sf::Sprite startButtonSprite;
@@ -30,7 +37,6 @@ private:
     void handleEvents( );
     void render();
     bool isSpriteClicked(sf::Sprite sprite);
-    //bool state;
 };
 
 #endif // MENU_HPP

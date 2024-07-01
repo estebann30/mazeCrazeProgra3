@@ -81,18 +81,4 @@ class Chunk {
         void setSouthWest(Chunk* sw);
 };
 
-
-// int main(){
-//     Chunk block(0 , 0, false, false, 'u', 'v');
-
-//     block.setRoom(2);
-
-//     int dato = block.getRoom();
-
-
-//     cout << "El dato que buscas es: " << dato << "\n";
-
-//     return 0;
-// }
-
 #endif

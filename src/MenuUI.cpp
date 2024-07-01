@@ -5,6 +5,12 @@ Menu::Menu(sf::RenderWindow &window) : window(window) {
         throw std::runtime_error("Failed to load textures");
     }
 
+    if (!menuMusicBuffer.loadFromFile("assets/menuMusic.ogg")) {
+        throw std::runtime_error("Error al cargar el sonido de la victoria");
+    
+    }
+    menuMusicSound.setBuffer(menuMusicBuffer);
+
     // Set up sprites
     backgroundSprite.setTexture(backgroundTexture);
     sf::Vector2u windowSize = window.getSize();
@@ -33,7 +39,8 @@ bool Menu::loadTextures() {
 
 void Menu::run() {
     
-    //Game initGame;
+    menuMusicSound.setLoop(true);
+    menuMusicSound.play();
 
     while(window.isOpen()){
         handleEvents();
@@ -54,20 +61,26 @@ void Menu::handleEvents() {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
                 if (isSpriteClicked(startButtonSprite)) {
-                    std::cout << "Sprite 1 clickeado!" << std::endl;
 
+                    status = true;
+                    menuMusicSound.stop();
                     window.close();
-                    //game.run();
-                    
+
                 }
                 if (isSpriteClicked(exitButtonSprite)) {
-                    std::cout << "Sprite 2 clickeado!" << std::endl;
+                    
+                    status = false;
+                    menuMusicSound.stop();
                     window.close();
 
                 }
             }
         }
     }
+}
+
+bool Menu::get_status(){
+    return status;
 }
 
 void Menu::render() {
