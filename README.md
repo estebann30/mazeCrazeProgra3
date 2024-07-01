@@ -10,6 +10,7 @@ primero en llegar al tesoro gana. Donde los jugadores se encontraran con poderes
 # Photos
 
 
+![fichaCon2](https://github.com/estebann30/mazeCrazeProgra3/assets/165967249/b1a7a8ae-46e4-44e2-83c5-6f0879a22749)
 
 # Characteristics 
 
