@@ -38,17 +38,22 @@ Game::Game(Explorer& explorer,  Controller& controller)
     offsetX = (WINDOW_WIDTH - (totalSpritesX * CELL_SIZE)) / 2.0f;
     offsetY = (WINDOW_HEIGHT - (totalSpritesY * CELL_SIZE)) / 2.0f;
 
-    if (!playerTexture.loadFromFile("assets/mago.png")) {
+    if (!player1Texture.loadFromFile("assets/player1.png")) {
         std::cerr << "Error al cargar la imagen del jugador" << std::endl;
-        throw std::runtime_error("Error al cargar la imagen del jugador");
+        throw std::runtime_error("Error al cargar la imagen del jugador 1");
+    }
+    if (!player2Texture.loadFromFile("assets/player2.png")) {
+        std::cerr << "Error al cargar la imagen del jugador" << std::endl;
+        throw std::runtime_error("Error al cargar la imagen del jugador 2");
     }
 
-    player1.setTexture(playerTexture);
-    player2.setTexture(playerTexture);
+
+    player1.setTexture(player1Texture);
+    player2.setTexture(player2Texture);
 
     float playerScale = 0.6f; 
-    player1.setScale(playerScale * CELL_SIZE / playerTexture.getSize().x, playerScale * CELL_SIZE / playerTexture.getSize().y);
-    player2.setScale(playerScale * CELL_SIZE / playerTexture.getSize().x, playerScale * CELL_SIZE / playerTexture.getSize().y);
+    player1.setScale(playerScale * CELL_SIZE / player1Texture.getSize().x, playerScale * CELL_SIZE / player1Texture.getSize().y);
+    player2.setScale(playerScale * CELL_SIZE / player2Texture.getSize().x, playerScale * CELL_SIZE / player2Texture.getSize().y);
 
     if (!fondoTexture.loadFromFile("assets/fondo.jpeg")) {
         std::cerr << "Error al cargar la imagen del fondo" << std::endl;
@@ -92,7 +97,12 @@ Game::Game(Explorer& explorer,  Controller& controller)
         throw std::runtime_error("Error al cargar el sonido ambiente");
     
     }
+    if (!victorySongBuffer.loadFromFile("assets/victorySong.wav")) {
+        throw std::runtime_error("Error al cargar el sonido de la victoria");
     
+    }
+    
+    victorySongSound.setBuffer(victorySongBuffer);
     ambientMusicSound.setBuffer(ambientMusicBuffer);
 
     player_1_wins_sprite.setTexture(player_1_wins_texture);
@@ -135,17 +145,30 @@ void Game::run(Explorer& explorer,  Controller& controller) {
         if (explorer.getWinner() == 2){
 
             ambientMusicSound.stop();
+            
             window.clear();
             window.draw(player_2_wins_sprite);
             window.display();
+
+
+            victorySongSound.play();
+            sf::sleep(sf::milliseconds(6000)); //let the music play
+            window.close();
+
         }
 
         if (explorer.getWinner() == 1){
 
             ambientMusicSound.stop();
+            
             window.clear();
             window.draw(player_1_wins_sprite);
             window.display();
+
+            victorySongSound.play();
+            sf::sleep(sf::milliseconds(6000)); //let the music play
+            window.close();
+
         };
     }   
 }

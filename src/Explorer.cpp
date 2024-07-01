@@ -41,17 +41,26 @@ void Explorer:: moveN(int p){
         players[p - 1][1] = zone[x][y]->getNorth()->getFloor();
 
         if(zone[x][y]->getNorth()->getContain() == '$') {
+
             setWinner(getPlayer());
+
         } else if(zone[x][y]->getNorth()->getContain() == '@') {
+
             addMindFlay(getPlayer());
             zone[x][y]->getNorth()->setContain('#');
+
         } else if(zone[x][y]->getNorth()->getContain() == '&') {
+
             addJumps(getPlayer());
             zone[x][y]->getNorth()->setContain('#');
+
         } else if(zone[x][y]->getContain() == '^') {
+
             zone[x][y]->setNorth(nullptr);
             zone[x][y]->setContain('#');
+
         }else if(zone[x][y]->getNorth()->getContain() == '%'){
+
             addDoublePlay(getPlayer());
             zone[x][y]->getNorth()->setContain('#');
         }
@@ -63,7 +72,26 @@ void Explorer:: moveN(int p){
 
 
     } else {
-        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '^' && zone[x - 1][y]) {
+
+        if(getMindFlay(getPlayer()) == 1 && getJumps(getRival()) > 0 && zone[x][y]->getContain() != '^' && zone[x - 1][y]){
+
+            --players[getRival()-1][0];
+
+            if(zone[x-1][y]->getContain() == '$' && zone[x-1][y]){ //in case of wall jumping over treasure
+                setWinner(getRival());
+
+            } else if(zone[x-1][y]->getContain() == '&' && zone[x-1][y]){
+                addJumps(getRival());
+                zone[x-1][y]->setContain('#');
+
+            } else if(zone[x-1][y]->getContain() == '%' && zone[x-1][y]){
+                addDoublePlay(getRival());
+                zone[x-1][y]->setContain('#');
+            }
+
+            deductJumps(getRival());
+        
+        } else if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '^' && zone[x - 1][y]) {
             --players[p - 1][0];
 
             if(zone[x-1][y]->getContain() == '$' && zone[x-1][y]){ //in case of wall jumping over treasure
@@ -71,12 +99,15 @@ void Explorer:: moveN(int p){
 
             } else if(zone[x-1][y]->getContain() == '@' && zone[x-1][y]){
                 addMindFlay(getPlayer());
+                zone[x-1][y]->setContain('#');
 
             } else if(zone[x-1][y]->getContain() == '&' && zone[x-1][y]){
                 addJumps(getPlayer());
+                zone[x-1][y]->setContain('#');
 
             } else if(zone[x-1][y]->getContain() == '%' && zone[x-1][y]){
                 addDoublePlay(getPlayer());
+                zone[x-1][y]->setContain('#');
             }
 
             deductJumps(getPlayer());
@@ -86,7 +117,7 @@ void Explorer:: moveN(int p){
             }
             
         } else {
-            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+            cout << endl << "Sergio's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
     }
 }
@@ -113,17 +144,26 @@ void Explorer:: moveS(int p){
         players[p - 1][1] = zone[x][y]->getSouth()->getFloor();
 
         if(zone[x][y]->getSouth()->getContain() == '$') {
+
             setWinner(getPlayer());
+
         } else if(zone[x][y]->getSouth()->getContain() == '@') {
+
             addMindFlay(getPlayer());
             zone[x][y]->getSouth()->setContain('#');
+
         } else if(zone[x][y]->getSouth()->getContain() == '&') {
+
             addJumps(getPlayer());
             zone[x][y]->getSouth()->setContain('#');
+
         } else if(zone[x][y]->getContain() == 'v') {
+
             zone[x][y]->setSouth(nullptr);
             zone[x][y]->setContain('#');
+
         } else if(zone[x][y]->getSouth()->getContain() == '%'){
+
             addDoublePlay(getPlayer());
             zone[x][y]->getSouth()->setContain('#');
         }
@@ -135,7 +175,25 @@ void Explorer:: moveS(int p){
 
     } else {
 
-        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != 'v' && zone[x + 1][y]) {
+        if(getMindFlay(getPlayer()) == 1 && getJumps(getRival()) > 0 && zone[x][y]->getContain() != 'v' && zone[x + 1][y]){
+            
+             --players[getRival()-1][0];
+
+            if(zone[x+1][y]->getContain() == '$' && zone[x+1][y]){ //in case of wall jumping over treasure
+                setWinner(getRival());
+
+            } else if(zone[x+1][y]->getContain() == '&' && zone[x+1][y]){
+                addJumps(getRival());
+                zone[x+1][y]->setContain('#');
+
+            } else if(zone[x+1][y]->getContain() == '%' && zone[x+1][y]){
+                addDoublePlay(getRival());
+                zone[x+1][y]->setContain('#');
+            }
+
+            deductJumps(getRival());
+        
+        } else if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != 'v' && zone[x + 1][y]) {
             ++players[p - 1][0];
 
             if(zone[x+1][y]->getContain() == '$' && zone[x+1][y]){
@@ -143,12 +201,15 @@ void Explorer:: moveS(int p){
 
             } else if(zone[x+1][y]->getContain() == '@' && zone[x+1][y]){
                 addMindFlay(getPlayer());
+                zone[x+1][y]->setContain('#');
 
             } else if(zone[x+1][y]->getContain() == '&' && zone[x+1][y]){
                 addJumps(getPlayer());
+                zone[x+1][y]->setContain('#');
 
             } else if(zone[x+1][y]->getContain() == '%' && zone[x+1][y]){
                 addDoublePlay(getPlayer());
+                zone[x+1][y]->setContain('#');
             }
 
             deductJumps(getPlayer());
@@ -157,7 +218,7 @@ void Explorer:: moveS(int p){
                 changePlayer();
             }
         } else {
-            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+            cout << endl << "Sergio's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
     }
 
@@ -185,17 +246,26 @@ void Explorer:: moveE(int p){
         players[p - 1][1] = zone[x][y]->getEast()->getFloor();
 
         if(zone[x][y]->getEast()->getContain() == '$') {
+
             setWinner(getPlayer());
+
         } else if(zone[x][y]->getEast()->getContain() == '@') {
+
             addMindFlay(getPlayer());
             zone[x][y]->getEast()->setContain('#');
+
         } else if(zone[x][y]->getEast()->getContain() == '&') {
+
             addJumps(getPlayer());
             zone[x][y]->getEast()->setContain('#');
+
         } else if(zone[x][y]->getContain() == '>') {
+
             zone[x][y]->setEast(nullptr);
             zone[x][y]->setContain('#');
+
         } else if(zone[x][y]->getEast()->getContain() == '%'){
+
             addDoublePlay(getPlayer());
             zone[x][y]->getEast()->setContain('#');
         }
@@ -207,7 +277,25 @@ void Explorer:: moveE(int p){
 
     } else {
 
-        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '>' && zone[x ][y + 1]) {
+        if(getMindFlay(getPlayer()) == 1 && getJumps(getRival()) > 0 && zone[x][y]->getContain() != '>' && zone[x][y+1]){
+
+            --players[getRival()-1][0];
+
+            if(zone[x][y+1]->getContain() == '$' && zone[x][y+1]){ //in case of wall jumping over treasure
+                setWinner(getRival());
+
+            } else if(zone[x][y+1]->getContain() == '&' && zone[x][y+1]){
+                addJumps(getRival());
+                zone[x][y+1]->setContain('#');
+
+            } else if(zone[x][y+1]->getContain() == '%' && zone[x][y+1]){
+                addDoublePlay(getRival());
+                zone[x][y+1]->setContain('#');
+            }
+
+            deductJumps(getRival());
+        
+        } else if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '>' && zone[x ][y + 1]) {
             ++players[p - 1][1];
 
             if(zone[x][y+1]->getContain() == '$' && zone[x][y+1]){
@@ -215,12 +303,15 @@ void Explorer:: moveE(int p){
 
             } else if(zone[x][y+1]->getContain() == '@' && zone[x][y+1]){
                 addMindFlay(getPlayer());
+                zone[x][y+1]->setContain('#');
 
             } else if(zone[x][y+1]->getContain() == '&' && zone[x][y+1]){
                 addJumps(getPlayer());
+                zone[x][y+1]->setContain('#');
 
             } else if(zone[x][y+1]->getContain() == '%' && zone[x][y+1]){
                 addDoublePlay(getPlayer());
+                zone[x][y+1]->setContain('#');
             }
 
             deductJumps(getPlayer());
@@ -228,8 +319,9 @@ void Explorer:: moveE(int p){
             if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0){
                 changePlayer();
             }
+
         } else {
-            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+            cout << endl << "Sergio's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
     }
 }
@@ -256,17 +348,26 @@ void Explorer:: moveW(int p){
         players[p - 1][1] = zone[x][y]->getWest()->getFloor();
 
         if(zone[x][y]->getWest()->getContain() == '$') {
+            
             setWinner(getPlayer());
+            
         } else if(zone[x][y]->getWest()->getContain() == '@') {
+
             addMindFlay(getPlayer());
             zone[x][y]->getWest()->setContain('#');
+
         } else if(zone[x][y]->getWest()->getContain() == '&') {
+
             addJumps(getPlayer());
             zone[x][y]->getWest()->setContain('#');
+
         } else if(zone[x][y]->getContain() == '<') {
+
             zone[x][y]->setWest(nullptr);
             zone[x][y]->setContain('#');
+
         } else if(zone[x][y]->getWest()->getContain() == '%'){
+
             addDoublePlay(getPlayer());
             zone[x][y]->getWest()->setContain('#');
         }
@@ -277,7 +378,26 @@ void Explorer:: moveW(int p){
         }
 
     } else {
-        if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '<' && zone[x ][y - 1]) {
+
+        if(getMindFlay(getPlayer()) == 1 && getJumps(getRival()) > 0 && zone[x][y]->getContain() != '<' && zone[x][y-1]){
+
+            --players[getRival()-1][0];
+
+            if(zone[x][y-1]->getContain() == '$' && zone[x][y-1]){ //in case of wall jumping over treasure
+                setWinner(getRival());
+
+            } else if(zone[x][y-1]->getContain() == '&' && zone[x][y-1]){
+                addJumps(getRival());
+                zone[x][y-1]->setContain('#');
+
+            } else if(zone[x][y-1]->getContain() == '%' && zone[x][y-1]){
+                addDoublePlay(getRival());
+                zone[x][y-1]->setContain('#');
+            }
+
+            deductJumps(getRival());
+        
+        } else if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '<' && zone[x ][y - 1]) {
             --players[p - 1][1];
 
             if(zone[x][y-1]->getContain() == '$' && zone[x][y-1]){
@@ -285,12 +405,15 @@ void Explorer:: moveW(int p){
 
             } else if(zone[x][y-1]->getContain() == '@' && zone[x][y-1]){
                 addMindFlay(getPlayer());
+                zone[x][y-1]->setContain('#');
 
             } else if(zone[x][y-1]->getContain() == '&' && zone[x][y-1]){
                 addJumps(getPlayer());
+                zone[x][y-1]->setContain('#');
 
             } else if(zone[x][y-1]->getContain() == '%' && zone[x][y-1]){
                 addDoublePlay(getPlayer());
+                zone[x][y-1]->setContain('#');
             }
 
             deductJumps(getPlayer());
@@ -298,8 +421,9 @@ void Explorer:: moveW(int p){
             if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0){
                 changePlayer();
             }
+
         } else {
-            cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
+            cout << endl << "Sergio's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
     }
 }
@@ -350,6 +474,14 @@ void Explorer:: changePlayer(){
         player = 2;
     } else {
         player = 1;
+    }
+}
+
+int Explorer:: getRival(){
+    if(getPlayer() == 1) {
+        return 2;
+    } else {
+        return 1;
     }
 }
 
@@ -414,21 +546,6 @@ int Explorer::getJumps(int p) const {
 void Explorer:: thombRaider() {
 
     auto& zone = dungeon().mapped();
-
-    //cout << endl << "Parte1 sirve" << endl;
-
-    // //metodo para visualizar los indicadores numericos de los nodos
-    // for(int room = 0; room < zone.size(); ++room){
-    //     for(int floor = 0; floor < zone[room].size(); ++floor){
-    //         if(zone[room][floor] != nullptr) {
-    //             cout << "[" << zone[room][floor]->getRoom() << ", " << zone[room][floor]->getFloor() << "]";
-    //         } else {
-    //             cout << "      ";
-    //         }
-    //         cout << " ";
-    //     }
-    //     cout << endl;
-    // }
 
     int row = zone.size() * 2 + 1;
     int col = zone[0].size() * 2 + 1;

@@ -38,12 +38,15 @@ private:
 
     sf::SoundBuffer ambientMusicBuffer;
     sf::Sound ambientMusicSound;
+    sf::SoundBuffer victorySongBuffer;
+    sf::Sound victorySongSound;
 
     sf::Texture player_1_wins_texture;
     sf::Sprite player_1_wins_sprite;
     sf::Texture player_2_wins_texture;
     sf::Sprite player_2_wins_sprite;
-    sf::Texture playerTexture;
+    sf::Texture player1Texture;
+    sf::Texture player2Texture;
     sf::Sprite player1;
     sf::Sprite player2;
     sf::Texture powerTexture1;
