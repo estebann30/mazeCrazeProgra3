@@ -5,7 +5,7 @@ Tarea Programada 3
 
 MazeCraze es un videojuego en 2D. El juego trata acerca de un laberinto
 en el cual dos jugadores son colocados en las esquinas opuestas y el
-primero en llegar al tesoro gana.
+primero en llegar al tesoro gana. Donde los jugadores se encontraran con poderes y portales los cuales les ayudaran a conseguir el tesoro, o quizas no.
 
 # Photos
 
