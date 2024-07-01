@@ -133,12 +133,16 @@ void Game::run(Explorer& explorer,  Controller& controller) {
         }
 
         if (explorer.getWinner() == 2){
+
+            ambientMusicSound.stop();
             window.clear();
             window.draw(player_2_wins_sprite);
             window.display();
         }
 
         if (explorer.getWinner() == 1){
+
+            ambientMusicSound.stop();
             window.clear();
             window.draw(player_1_wins_sprite);
             window.display();
@@ -274,10 +278,10 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed, Explorer& ex
         else if (key == sf::Keyboard::A) direction = 'a';
         else if (key == sf::Keyboard::D) direction = 'd';
     } else if (explorer.getPlayer() == 2) {
-        if (key == sf::Keyboard::Up) direction = 'G';
-        else if (key == sf::Keyboard::Down) direction = 'H';
-        else if (key == sf::Keyboard::Left) direction = 'K';
-        else if (key == sf::Keyboard::Right) direction = 'J';
+        if (key == sf::Keyboard::Up) direction = 'I';
+        else if (key == sf::Keyboard::Down) direction = 'K';
+        else if (key == sf::Keyboard::Left) direction = 'J';
+        else if (key == sf::Keyboard::Right) direction = 'L';
     }
 
     if (direction != '\0') { //no es nulo
@@ -285,30 +289,12 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed, Explorer& ex
     }
 }
 
-
-// void Game::checkPowerCollision(sf::Sprite& player) {
-//     sf::Vector2f playerPosition = player.getPosition();
-//     int x = (playerPosition.x - offsetX) / CELL_SIZE;
-//     int y = (playerPosition.y - offsetY) / CELL_SIZE;
-//     if (x >= 0 && x < totalSpritesX && y >= 0 && y < totalSpritesY) {
-//         Node& node = grid.getNode(x, y);
-//         if (node.hasPower1) {
-//             node.hasPower1 = false;
-//         }
-//         if (node.hasPower2) {
-//             node.hasPower2 = false;
-//         }
-//         if (node.hasPower3) {
-//             node.hasPower3 = false;
-//         }
-//         if (node.hasPower4) {
-//             node.hasPower4 = false;
-//         }
-//     }
-// }
-
 void Game::sendEventToBackend(char direction, Explorer& explorer, Controller& controller) {
-    //std::cout << "Evento enviado al backend: " << event << " Jugador: " << player << " Dirección: " << direction << std::endl;
+
     controller.pad(explorer, direction);
+
+
+    
+
 }
 

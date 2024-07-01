@@ -54,7 +54,9 @@ class Explorer {
 
     void setWinner(int p);
 
-    void setMindFlay(int p, int status);
+    void addMindFlay(int p);
+
+    void deductMindFlay(int p);
 
     void addDoublePlay(int p);
 

@@ -22,6 +22,13 @@ void Explorer:: setExplorer(int p, int x, int y){
 void Explorer:: moveN(int p){
     // players[p - 1][1]--; //norte
 
+    if(getMindFlay(getPlayer()) != 0){
+        deductMindFlay(getPlayer());
+
+    } else if(getDoublePlay(getPlayer()) != 0){
+        deductDoublePlay(getPlayer());
+    } 
+
     auto& zone = dungeon().mapped();
 
     int x = players[p - 1][0];
@@ -36,7 +43,7 @@ void Explorer:: moveN(int p){
         if(zone[x][y]->getNorth()->getContain() == '$') {
             setWinner(getPlayer());
         } else if(zone[x][y]->getNorth()->getContain() == '@') {
-            setMindFlay(getPlayer(), 1);
+            addMindFlay(getPlayer());
             zone[x][y]->getNorth()->setContain('#');
         } else if(zone[x][y]->getNorth()->getContain() == '&') {
             addJumps(getPlayer());
@@ -49,14 +56,35 @@ void Explorer:: moveN(int p){
             zone[x][y]->getNorth()->setContain('#');
         }
         
-        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0) {
             changePlayer();
-        } 
+
+        }
+
+
     } else {
         if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '^' && zone[x - 1][y]) {
             --players[p - 1][0];
+
+            if(zone[x-1][y]->getContain() == '$' && zone[x-1][y]){ //in case of wall jumping over treasure
+                setWinner(getPlayer());
+
+            } else if(zone[x-1][y]->getContain() == '@' && zone[x-1][y]){
+                addMindFlay(getPlayer());
+
+            } else if(zone[x-1][y]->getContain() == '&' && zone[x-1][y]){
+                addJumps(getPlayer());
+
+            } else if(zone[x-1][y]->getContain() == '%' && zone[x-1][y]){
+                addDoublePlay(getPlayer());
+            }
+
             deductJumps(getPlayer());
-            changePlayer();
+
+            if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0){
+                changePlayer();
+            }
+            
         } else {
             cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
@@ -65,6 +93,13 @@ void Explorer:: moveN(int p){
 
 void Explorer:: moveS(int p){
     // players[p - 1][1]++; //sur
+
+    if(getMindFlay(getPlayer()) != 0){
+        deductMindFlay(getPlayer());
+
+    } else if(getDoublePlay(getPlayer()) != 0){
+        deductDoublePlay(getPlayer());
+    }
 
     auto& zone = dungeon().mapped();
 
@@ -80,7 +115,7 @@ void Explorer:: moveS(int p){
         if(zone[x][y]->getSouth()->getContain() == '$') {
             setWinner(getPlayer());
         } else if(zone[x][y]->getSouth()->getContain() == '@') {
-            setMindFlay(getPlayer(), 1);
+            addMindFlay(getPlayer());
             zone[x][y]->getSouth()->setContain('#');
         } else if(zone[x][y]->getSouth()->getContain() == '&') {
             addJumps(getPlayer());
@@ -93,15 +128,34 @@ void Explorer:: moveS(int p){
             zone[x][y]->getSouth()->setContain('#');
         }
 
-        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0) {
             changePlayer();
-        } 
+
+        }
+
     } else {
 
         if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != 'v' && zone[x + 1][y]) {
             ++players[p - 1][0];
+
+            if(zone[x+1][y]->getContain() == '$' && zone[x+1][y]){
+                setWinner(getPlayer());
+
+            } else if(zone[x+1][y]->getContain() == '@' && zone[x+1][y]){
+                addMindFlay(getPlayer());
+
+            } else if(zone[x+1][y]->getContain() == '&' && zone[x+1][y]){
+                addJumps(getPlayer());
+
+            } else if(zone[x+1][y]->getContain() == '%' && zone[x+1][y]){
+                addDoublePlay(getPlayer());
+            }
+
             deductJumps(getPlayer());
-            changePlayer();
+
+            if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0){
+                changePlayer();
+            }
         } else {
             cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
@@ -111,6 +165,13 @@ void Explorer:: moveS(int p){
 
 void Explorer:: moveE(int p){
     // players[p - 1][0]++; //este
+
+    if(getMindFlay(getPlayer()) != 0){
+        deductMindFlay(getPlayer());
+
+    } else if(getDoublePlay(getPlayer()) != 0){
+        deductDoublePlay(getPlayer());
+    } 
 
     auto& zone = dungeon().mapped();
 
@@ -126,7 +187,7 @@ void Explorer:: moveE(int p){
         if(zone[x][y]->getEast()->getContain() == '$') {
             setWinner(getPlayer());
         } else if(zone[x][y]->getEast()->getContain() == '@') {
-            setMindFlay(getPlayer(), 1);
+            addMindFlay(getPlayer());
             zone[x][y]->getEast()->setContain('#');
         } else if(zone[x][y]->getEast()->getContain() == '&') {
             addJumps(getPlayer());
@@ -139,15 +200,34 @@ void Explorer:: moveE(int p){
             zone[x][y]->getEast()->setContain('#');
         }
 
-        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0) {
             changePlayer();
-        } 
+
+        }
+
     } else {
 
         if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '>' && zone[x ][y + 1]) {
             ++players[p - 1][1];
+
+            if(zone[x][y+1]->getContain() == '$' && zone[x][y+1]){
+                setWinner(getPlayer());
+
+            } else if(zone[x][y+1]->getContain() == '@' && zone[x][y+1]){
+                addMindFlay(getPlayer());
+
+            } else if(zone[x][y+1]->getContain() == '&' && zone[x][y+1]){
+                addJumps(getPlayer());
+
+            } else if(zone[x][y+1]->getContain() == '%' && zone[x][y+1]){
+                addDoublePlay(getPlayer());
+            }
+
             deductJumps(getPlayer());
-            changePlayer();
+
+            if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0){
+                changePlayer();
+            }
         } else {
             cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
@@ -156,6 +236,13 @@ void Explorer:: moveE(int p){
 
 void Explorer:: moveW(int p){
     // players[p - 1][0]--; //oeste
+
+    if(getMindFlay(getPlayer()) != 0){
+        deductMindFlay(getPlayer());
+
+    } else if(getDoublePlay(getPlayer()) != 0){
+        deductDoublePlay(getPlayer());
+    } 
 
     auto& zone = dungeon().mapped();
 
@@ -171,7 +258,7 @@ void Explorer:: moveW(int p){
         if(zone[x][y]->getWest()->getContain() == '$') {
             setWinner(getPlayer());
         } else if(zone[x][y]->getWest()->getContain() == '@') {
-            setMindFlay(getPlayer(), 1);
+            addMindFlay(getPlayer());
             zone[x][y]->getWest()->setContain('#');
         } else if(zone[x][y]->getWest()->getContain() == '&') {
             addJumps(getPlayer());
@@ -184,14 +271,33 @@ void Explorer:: moveW(int p){
             zone[x][y]->getWest()->setContain('#');
         }
 
-        if(getMindFlay(1) == 0 && getMindFlay(2) == 0) {
+        if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0) {
             changePlayer();
-        } 
+
+        }
+
     } else {
         if(getJumps(getPlayer()) > 0 && zone[x][y]->getContain() != '<' && zone[x ][y - 1]) {
             --players[p - 1][1];
+
+            if(zone[x][y-1]->getContain() == '$' && zone[x][y-1]){
+                setWinner(getPlayer());
+
+            } else if(zone[x][y-1]->getContain() == '@' && zone[x][y-1]){
+                addMindFlay(getPlayer());
+
+            } else if(zone[x][y-1]->getContain() == '&' && zone[x][y-1]){
+                addJumps(getPlayer());
+
+            } else if(zone[x][y-1]->getContain() == '%' && zone[x][y-1]){
+                addDoublePlay(getPlayer());
+            }
+
             deductJumps(getPlayer());
-            changePlayer();
+
+            if(getMindFlay(1) == 0 && getMindFlay(2) == 0 && getDoublePlay(1) == 0 && getDoublePlay(2) == 0){
+                changePlayer();
+            }
         } else {
             cout << endl << "Oak's words echoed... 'There's a time and place for everything but not now!'" << endl;
         }
@@ -251,8 +357,12 @@ void Explorer:: setWinner(int p){
     winner = p;
 }
 
-void Explorer:: setMindFlay(int p, int status){
-    players[p - 1][2] = status;
+void Explorer:: addMindFlay(int p){
+    players[p - 1][2] += 2;
+}
+
+void Explorer:: deductMindFlay(int p){
+    players[p - 1][2]--;
 }
 
 void Explorer:: addDoublePlay(int p){
@@ -300,7 +410,7 @@ int Explorer::getJumps(int p) const {
 }
 
 
-
+//para visualizar en terminal
 void Explorer:: thombRaider() {
 
     auto& zone = dungeon().mapped();
